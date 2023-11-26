@@ -11,6 +11,22 @@ const router = createRouter({
         sidebar: () => import('../pages/contacts/ContactsSidebar.vue')
       },
     },
+    {
+      path: '/chats',
+      name: 'chats',
+      components: {
+        default: () => import('../pages/contacts/ContactsPage.vue'),
+        sidebar: () => import('../pages/contacts/ContactsSidebar.vue')
+      },
+    },
+    {
+      path: '/posts',
+      name: 'posts',
+      components: {
+        default: () => import('../pages/contacts/ContactsPage.vue'),
+        sidebar: () => import('../pages/contacts/ContactsSidebar.vue')
+      },
+    },
   ]
 })
 

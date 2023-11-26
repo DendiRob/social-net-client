@@ -1,6 +1,6 @@
 <template>
     <div class="defaultLayout">
-        <div class="tabbar"></div>
+        <TabBar />
         <div class="sidebar">
             <router-view name="sidebar"></router-view>
         </div>        
@@ -10,6 +10,8 @@
     </div>
 </template>
 <script setup>
+import TabBar from '../components/TabBar.vue';
+
 
 </script>
 <style scoped lang="scss">
@@ -27,9 +29,4 @@
         height: 100vh;
         background-color: black;
     }
-    .tabbar {
-        width: 65px;
-        background-color: yellow;
-        height: 100vh;
-      }
 </style>
