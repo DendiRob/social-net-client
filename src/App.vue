@@ -1,12 +1,10 @@
 <script setup>
-// import { RouterView } from 'vue-router';
-import ContactsPage from './pages/contacts/ContactsPage.vue';
-
+import DefaultLayout from './layouts/DefaultLayout.vue';
 </script>
 
 <template>
     <div class="app">
-      <ContactsPage />
+      <DefaultLayout />
     </div>
 </template>
 

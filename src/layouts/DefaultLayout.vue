@@ -2,10 +2,10 @@
     <div class="defaultLayout">
         <div class="tabbar"></div>
         <div class="sidebar">
-            <slot name="sidebar__slot"></slot>
+            <router-view name="sidebar"></router-view>
         </div>        
         <main>
-            <slot name="main__slot"></slot>
+            <router-view ></router-view>
         </main>
     </div>
 </template>
