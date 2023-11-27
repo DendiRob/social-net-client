@@ -34,13 +34,10 @@
 
 </script>
 <style scoped lang="scss">
-.router-link-active {
-  border-left: 2px solid #248BF2;
-}
 .tabbar {
     width: 65px;
     height: 100vh;
-    background-color: #DAE4F2;
+    background-color: #F2F3F5;
     padding: 16px 0;
     box-sizing: border-box;
     &__nav {
@@ -60,7 +57,15 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        border-left: 2px solid #DAE4F2;
+        img {
+          margin-right: 2px;
+        }
       }
     }
-  }
+}
+.router-link-active {
+  border-left: 2px solid #248BF2;
+}
+
 </style>

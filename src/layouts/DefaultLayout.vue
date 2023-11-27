@@ -21,8 +21,11 @@ import TabBar from '../components/TabBar.vue';
     .sidebar {
         max-width: 360px;
         width: 100%;
-        background-color: red;
+        background-color: #FFF;
         height: 100vh;
+        border-right: 1px solid #F2F3F5;
+        box-sizing: border-box;
+        padding-top: 10px;
     }
     .main {
         width: 100%;
