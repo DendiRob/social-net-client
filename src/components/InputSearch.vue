@@ -1,12 +1,14 @@
 <template>
     <div class="search">
         <div class="search-wrapper">
-            <input placeholder="Search" type="text" class="search__input">
+            <input @input="$emit('update:modelValue', $event.target.value)" :value="modelValue" placeholder="Search" type="text" class="search__input">
             <svg-icon name="search" class="search__icon"/>
         </div>
     </div>
 </template>
 <script setup>
+defineProps(['modelValue'])
+defineEmits(['update:modelValue'])
 
 </script>
 <style scoped lang="scss">
