@@ -1,13 +1,14 @@
-import { resolve } from "path";
-import { defineConfig } from "vite";
-import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
-import paths from "vite-tsconfig-paths";
+import { resolve } from 'path';
+import { defineConfig } from 'vite';
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
+import paths from 'vite-tsconfig-paths';
 
-import vue from "@vitejs/plugin-vue";
+import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
   root: './src',
   publicDir: '../public',
+  envDir: '../',
   build: {
     outDir: '../dist'
   },

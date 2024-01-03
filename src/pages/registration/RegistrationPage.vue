@@ -13,6 +13,11 @@
         />
         <AuthInput
           class="reg__input"
+          v-model="nameInput"
+          placeholder="Name"
+        />
+        <AuthInput
+          class="reg__input"
           v-model="passInput"
           placeholder="Password"
         />
@@ -27,15 +32,27 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref} from 'vue';
+import {registration } from 'services/AuthService.js'
 import AuthInput from 'components/AuthInput.vue';
 import addPhotoUrl from "assets/add-photo.svg";
 
+
 const emailInput = ref('');
+const nameInput = ref('');
 const passInput = ref('');
 const confirmPassInput = ref('');
 
-function onSubmit() {}
+async function onSubmit() {
+  //проверка на одинаковые пароли и то,что поле имеет необходимые данные
+  const regDto = {
+    email: emailInput.value,
+    name: nameInput.value,
+    password: passInput.value
+  }
+  const data = await registration(regDto);
+  console.log(data)
+}
 </script>
 <style lang="scss">
 .reg {
@@ -58,7 +75,7 @@ function onSubmit() {}
     font-weight: 700;
   }
   &__inputs {
-    height: 270px;
+    height: 330px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
