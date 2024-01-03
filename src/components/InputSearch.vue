@@ -17,7 +17,7 @@ defineProps(['modelValue']);
 const emit = defineEmits(['update:modelValue']);
 
 const updateValue = (e: Event) => {
-  emit('update:modelValue', (e.target as HTMLInputElement).value)
+  emit('update:modelValue', (e.target as HTMLInputElement).value);
 };
 </script>
 <style scoped lang="scss">

@@ -5,7 +5,7 @@
     {{ searchValue }}
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import InputSearch from '../../components/InputSearch.vue';
 import { ref } from 'vue';
 

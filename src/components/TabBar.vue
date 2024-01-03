@@ -3,7 +3,11 @@
     <nav>
       <ul class="tabbar__nav">
         <li>
-          <router-link to="/" class="tabbar__nav_item">
+          <router-link
+            to="/"
+            exact-active-class="router-link-active"
+            class="tabbar__nav_item"
+          >
             <img src="../assets/tabbar/friends.svg" alt="home" />
           </router-link>
         </li>
@@ -21,7 +25,7 @@
     </nav>
   </div>
 </template>
-<script setup></script>
+<script setup lang="ts"></script>
 <style scoped lang="scss">
 .tabbar {
   min-width: 65px;

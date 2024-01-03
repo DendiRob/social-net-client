@@ -2,15 +2,15 @@
   <div class="defaultLayout">
     <TabBar />
     <div class="sidebar">
-      <router-view name="sidebar"> </router-view>
+      <router-view name="sidebar"></router-view>
     </div>
     <main>
       <router-view class="main"></router-view>
     </main>
   </div>
 </template>
-<script setup>
-import TabBar from '../components/TabBar.vue';
+<script setup lang="ts">
+import TabBar from '@/components/TabBar.vue';
 </script>
 <style scoped lang="scss">
 main {
