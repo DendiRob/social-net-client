@@ -4,7 +4,7 @@
       <div class="reg__title">New account</div>
       <div class="reg__inputs">
           <label class="reg__input reg__input_img" for="addPhoto">
-            <input id="addPhoto" name="addPhoto" type="image" src="images/svg/add-photo.svg" alt="add photo" />
+            <input id="addPhoto" name="addPhoto" type="image" :src=addPhotoUrl  alt="add photo" />
           </label>
         <AuthInput
           class="reg__input"
@@ -29,6 +29,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import AuthInput from '@/components/AuthInput.vue';
+import addPhotoUrl from "@/assets/add-photo.svg";
 
 const emailInput = ref('');
 const passInput = ref('');
