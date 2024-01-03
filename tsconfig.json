@@ -4,12 +4,9 @@
   "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
     "composite": true,
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "target": "ESNext",
     "types": ["vite/client"],
-    "paths": {
-      "@/*": ["./src/*"]
-    },
     "allowJs": true
   }
 }

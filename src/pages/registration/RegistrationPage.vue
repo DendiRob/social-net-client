@@ -28,8 +28,8 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import AuthInput from '@/components/AuthInput.vue';
-import addPhotoUrl from "@/assets/add-photo.svg";
+import AuthInput from 'components/AuthInput.vue';
+import addPhotoUrl from "assets/add-photo.svg";
 
 const emailInput = ref('');
 const passInput = ref('');
