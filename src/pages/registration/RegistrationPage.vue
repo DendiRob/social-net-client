@@ -3,19 +3,21 @@
     <form name="reg-form" class="reg__form" @submit.prevent="onSubmit">
       <div class="reg__title">New account</div>
       <div class="reg__inputs">
-          <label class="reg__input reg__input_img" for="addPhoto">
-            <input id="addPhoto" name="addPhoto" type="image" :src=addPhotoUrl  alt="add photo" />
-          </label>
+        <label class="reg__input reg__input_img" for="addPhoto">
+          <input
+            id="addPhoto"
+            name="addPhoto"
+            type="image"
+            :src="addPhotoUrl"
+            alt="add photo"
+          />
+        </label>
         <AuthInput
           class="reg__input"
           v-model="emailInput"
           placeholder="Email"
         />
-        <AuthInput
-          class="reg__input"
-          v-model="nameInput"
-          placeholder="Name"
-        />
+        <AuthInput class="reg__input" v-model="nameInput" placeholder="Name" />
         <AuthInput
           class="reg__input"
           v-model="passInput"
@@ -32,11 +34,10 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref} from 'vue';
-import {registration } from 'services/AuthService.js'
+import { ref } from 'vue';
+import { registration } from 'services/AuthService.js';
 import AuthInput from 'components/AuthInput.vue';
-import addPhotoUrl from "assets/add-photo.svg";
-
+import addPhotoUrl from 'assets/add-photo.svg';
 
 const emailInput = ref('');
 const nameInput = ref('');
@@ -45,13 +46,14 @@ const confirmPassInput = ref('');
 
 async function onSubmit() {
   //проверка на одинаковые пароли и то,что поле имеет необходимые данные
+  //cockie не сохраняются
   const regDto = {
     email: emailInput.value,
     name: nameInput.value,
     password: passInput.value
-  }
+  };
   const data = await registration(regDto);
-  console.log(data)
+  console.log(data);
 }
 </script>
 <style lang="scss">
@@ -89,7 +91,7 @@ async function onSubmit() {
       cursor: pointer;
       width: 96px;
       height: 96px;
-      background-color: #F2F3F5;
+      background-color: #f2f3f5;
       border-radius: 100%;
       display: flex;
       justify-content: center;
@@ -103,14 +105,13 @@ async function onSubmit() {
     cursor: pointer;
     border: none;
     padding: 8px 24px;
-    background-color: #248BF2;
-    color: #FFF;
+    background-color: #248bf2;
+    color: #fff;
     border-radius: 8px;
     font-size: 15px;
-font-style: normal;
-font-weight: 600;
-line-height: 24px;
-
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px;
   }
 }
 </style>

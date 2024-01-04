@@ -1,6 +1,6 @@
-import "virtual:svg-icons-register";
+import 'virtual:svg-icons-register';
 
-import DefaultLayout from "../layouts/DefaultLayout.vue";
+import DefaultLayout from '../layouts/DefaultLayout.vue';
 
 import type { App } from 'index.types';
 
