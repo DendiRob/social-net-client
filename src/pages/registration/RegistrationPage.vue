@@ -10,6 +10,7 @@
             type="image"
             :src="addPhotoUrl"
             alt="add photo"
+            @click.prevent
           />
         </label>
         <AuthInput
@@ -38,6 +39,7 @@ import { ref } from 'vue';
 import { registration } from 'services/AuthService.js';
 import AuthInput from 'components/AuthInput.vue';
 import addPhotoUrl from 'assets/add-photo.svg';
+import axios from 'axios';
 
 const emailInput = ref('');
 const nameInput = ref('');
@@ -47,13 +49,22 @@ const confirmPassInput = ref('');
 async function onSubmit() {
   //проверка на одинаковые пароли и то,что поле имеет необходимые данные
   //cockie не сохраняются
-  const regDto = {
-    email: emailInput.value,
-    name: nameInput.value,
-    password: passInput.value
-  };
-  const data = await registration(regDto);
-  console.log(data);
+  try {
+    const regDto = {
+      email: emailInput.value,
+      name: nameInput.value,
+      password: passInput.value
+    };
+    const data = await registration(regDto);
+    console.log(data);
+  } catch (error) {
+    // заменить на тостер
+    if (axios.isAxiosError(error)) {
+      const apiErrors = error.response?.data;
+      alert(apiErrors.errors);
+    }
+    console.log(error);
+  }
 }
 </script>
 <style lang="scss">
