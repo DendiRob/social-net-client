@@ -14,18 +14,30 @@
           />
         </label>
         <AuthInput
-          class="reg__input"
+          @keydown.space.prevent
+          @input="emailInputChecker = false"
+          :class="['reg__input', { reg__input_warning: emailInputChecker }]"
           v-model="emailInput"
           placeholder="Email"
         />
-        <AuthInput class="reg__input" v-model="nameInput" placeholder="Name" />
         <AuthInput
-          class="reg__input"
+          @keydown.space.prevent
+          @input="nameInputChecker = false"
+          :class="['reg__input', { reg__input_warning: nameInputChecker }]"
+          v-model="nameInput"
+          placeholder="Name"
+        />
+        <AuthInput
+          @keydown.space.prevent
+          @input="passInputChecker = false"
+          :class="['reg__input', { reg__input_warning: passInputChecker }]"
           v-model="passInput"
           placeholder="Password"
         />
         <AuthInput
-          class="reg__input"
+          @keydown.space.prevent
+          @input="confirmInputChecker = false"
+          :class="['reg__input', { reg__input_warning: confirmInputChecker }]"
           v-model="confirmPassInput"
           placeholder="Repeat password"
         />
@@ -35,33 +47,70 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, type Ref } from 'vue';
 import { registration } from 'services/AuthService.js';
 import AuthInput from 'components/AuthInput.vue';
 import addPhotoUrl from 'assets/add-photo.svg';
 import axios from 'axios';
 
 const emailInput = ref('');
+const emailInputChecker = ref(false);
+
 const nameInput = ref('');
+const nameInputChecker = ref(false);
+
 const passInput = ref('');
+const passInputChecker = ref(false);
+
 const confirmPassInput = ref('');
+const confirmInputChecker = ref(false);
+
+function validateField(value: string, inputChecker: Ref<Boolean>) {
+  if (value == '') {
+    inputChecker.value = true;
+    return false;
+  } else {
+    inputChecker.value = false;
+    return true;
+  }
+}
+
+function validateForm() {
+  const fieldsToValidate = [
+    { value: emailInput.value, checker: emailInputChecker },
+    { value: nameInput.value, checker: nameInputChecker },
+    { value: passInput.value, checker: passInputChecker },
+    { value: confirmPassInput.value, checker: confirmInputChecker }
+  ];
+
+  const emptyFields = fieldsToValidate.map(({ value, checker }) =>
+    validateField(value, checker)
+  );
+
+  if (emptyFields.includes(false)) return false;
+
+  if (passInput.value !== confirmPassInput.value) {
+    confirmInputChecker.value = true;
+    return false;
+  }
+
+  return true;
+}
 
 async function onSubmit() {
-  //проверка на одинаковые пароли и то,что поле имеет необходимые данные
-  //cockie не сохраняются
   try {
     const regDto = {
       email: emailInput.value,
       name: nameInput.value,
       password: passInput.value
     };
-    const data = await registration(regDto);
-    console.log(data);
+    if (validateForm()) await registration(regDto);
   } catch (error) {
     // заменить на тостер
     if (axios.isAxiosError(error)) {
       const apiErrors = error.response?.data;
-      alert(apiErrors.errors);
+      const newErrors = apiErrors.errors.join('\n');
+      alert(newErrors);
     }
     console.log(error);
   }
@@ -97,6 +146,9 @@ async function onSubmit() {
   }
   &__input {
     width: 100%;
+    &_warning {
+      border: 1px solid #ff0000;
+    }
     &_img {
       margin: 0 auto;
       cursor: pointer;
