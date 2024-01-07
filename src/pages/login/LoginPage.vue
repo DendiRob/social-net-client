@@ -1,18 +1,8 @@
 <template>
   <div class="reg-wrapper">
     <form name="reg-form" class="reg__form" @submit.prevent="onSubmit">
-      <div class="reg__title">New account</div>
+      <div class="reg__title">Sign in</div>
       <div class="reg__inputs">
-        <label class="reg__input reg__input_img" for="addPhoto">
-          <input
-            id="addPhoto"
-            name="addPhoto"
-            type="image"
-            :src="addPhotoUrl"
-            alt="add photo"
-            @click.prevent
-          />
-        </label>
         <AuthInput
           @keydown.space.prevent
           @input="emailInputChecker = false"
@@ -22,51 +12,30 @@
         />
         <AuthInput
           @keydown.space.prevent
-          @input="nameInputChecker = false"
-          :class="['reg__input', { reg__input_warning: nameInputChecker }]"
-          v-model="nameInput"
-          placeholder="Name"
-        />
-        <AuthInput
-          @keydown.space.prevent
           @input="passInputChecker = false"
           :class="['reg__input', { reg__input_warning: passInputChecker }]"
           v-model="passInput"
           placeholder="Password"
         />
-        <AuthInput
-          @keydown.space.prevent
-          @input="confirmInputChecker = false"
-          :class="['reg__input', { reg__input_warning: confirmInputChecker }]"
-          v-model="confirmPassInput"
-          placeholder="Repeat password"
-        />
       </div>
-      <button class="reg__btn" type="submit">Registration</button>
-      <RouterLink :to="{ name: 'login' }" class="reg__loginLink"
-        >Sign in</RouterLink
+      <button class="reg__btn" type="submit">Login</button>
+      <RouterLink :to="{ name: 'reg' }" class="reg__loginLink"
+        >Sign up</RouterLink
       >
     </form>
   </div>
 </template>
 <script setup lang="ts">
 import { ref, type Ref } from 'vue';
-import { registration } from 'services/AuthService.js';
+import { login } from 'services/AuthService.js';
 import AuthInput from 'components/AuthInput.vue';
-import addPhotoUrl from 'assets/add-photo.svg';
 import axios from 'axios';
 
 const emailInput = ref('');
 const emailInputChecker = ref(false);
 
-const nameInput = ref('');
-const nameInputChecker = ref(false);
-
 const passInput = ref('');
 const passInputChecker = ref(false);
-
-const confirmPassInput = ref('');
-const confirmInputChecker = ref(false);
 
 function validateField(value: string, inputChecker: Ref<Boolean>) {
   if (value == '') {
@@ -81,9 +50,7 @@ function validateField(value: string, inputChecker: Ref<Boolean>) {
 function validateForm() {
   const fieldsToValidate = [
     { value: emailInput.value, checker: emailInputChecker },
-    { value: nameInput.value, checker: nameInputChecker },
-    { value: passInput.value, checker: passInputChecker },
-    { value: confirmPassInput.value, checker: confirmInputChecker }
+    { value: passInput.value, checker: passInputChecker }
   ];
 
   const emptyFields = fieldsToValidate.map(({ value, checker }) =>
@@ -92,32 +59,24 @@ function validateForm() {
 
   if (emptyFields.includes(false)) return false;
 
-  if (passInput.value !== confirmPassInput.value) {
-    confirmInputChecker.value = true;
-    return false;
-  }
-
   return true;
 }
 
 async function onSubmit() {
   try {
-    const regDto = {
+    const loginDto = {
       email: emailInput.value,
-      name: nameInput.value,
       password: passInput.value
     };
     if (!validateForm()) return;
-    const response = await registration(regDto);
+    const response = await login(loginDto);
     const tokens = response.data;
 
     const accessTokenName = import.meta.env.VITE_APP_ACCESS_TOKEN_NAME;
     localStorage.setItem(accessTokenName, tokens.access);
 
     emailInput.value = '';
-    nameInput.value = '';
     passInput.value = '';
-    confirmPassInput.value = '';
   } catch (error) {
     // заменить на тостер
     if (axios.isAxiosError(error)) {
@@ -139,7 +98,7 @@ async function onSubmit() {
   }
   &__form {
     height: 100%;
-    max-height: 470px;
+    max-height: 280px;
     width: 100%;
     max-width: 320px;
   }
@@ -150,7 +109,7 @@ async function onSubmit() {
     font-weight: 700;
   }
   &__inputs {
-    height: 330px;
+    height: 120px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
