@@ -1,7 +1,7 @@
-import axios from 'axios';
-import type { regDto } from 'types/AuthService.types';
+import axios, { type AxiosResponse } from 'axios';
+import type { regDtoType } from 'types/AuthService.types';
 
-function createAxiosInstance() {
+export function createAxiosInstance() {
   const instance = axios.create({
     baseURL: import.meta.env.VITE_APP_BASE_URI,
     withCredentials: true
@@ -12,6 +12,6 @@ function createAxiosInstance() {
 
 const AuthApi = createAxiosInstance();
 
-export async function registration(data: regDto) {
-  return await AuthApi.post('/registration', data);
+export async function registration(data: regDtoType): Promise<AxiosResponse> {
+  return await AuthApi.post('/auth/registration', data);
 }

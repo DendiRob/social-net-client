@@ -104,7 +104,17 @@ async function onSubmit() {
       name: nameInput.value,
       password: passInput.value
     };
-    if (validateForm()) await registration(regDto);
+    if (!validateForm()) return;
+    const response = await registration(regDto);
+    const tokens = response.data;
+    
+    const accessTokenName = import.meta.env.VITE_APP_ACCESS_TOKEN_NAME
+    localStorage.setItem(accessTokenName, tokens.access)
+
+    emailInput.value = ''
+    nameInput.value = ''
+    passInput.value = ''
+    confirmPassInput.value = ''
   } catch (error) {
     // заменить на тостер
     if (axios.isAxiosError(error)) {
@@ -141,7 +151,7 @@ async function onSubmit() {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin-top: 28px;
+    margin-top: 10px;
     max-width: 320px;
   }
   &__input {
