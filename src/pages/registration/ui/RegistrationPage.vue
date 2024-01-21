@@ -53,7 +53,7 @@
 import { ref, type Ref } from 'vue';
 import { registration } from 'services/AuthService.js';
 import AuthInput from 'components/AuthInput.vue';
-import addPhotoUrl from 'assets/add-photo.svg';
+import addPhotoUrl from 'shared/ui/assets/add-photo.svg';
 import axios from 'axios';
 
 const emailInput = ref('');

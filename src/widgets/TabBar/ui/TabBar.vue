@@ -8,17 +8,17 @@
             exact-active-class="router-link-active"
             class="tabbar__nav_item"
           >
-            <img src="../assets/tabbar/friends.svg" alt="home" />
+            <img src="shared/ui/assets/tabbar/friends.svg" alt="home" />
           </router-link>
         </li>
         <li>
           <router-link to="/chats" class="tabbar__nav_item">
-            <img src="../assets/tabbar/message.svg" alt="chat" />
+            <img src="shared/ui/assets/tabbar/message.svg" alt="chat" />
           </router-link>
         </li>
         <li>
           <router-link to="/posts" class="tabbar__nav_item">
-            <img src="../assets/tabbar/postIcon.svg" alt="postpage" />
+            <img src="shared/ui/assets/tabbar/postIcon.svg" alt="postpage" />
           </router-link>
         </li>
       </ul>

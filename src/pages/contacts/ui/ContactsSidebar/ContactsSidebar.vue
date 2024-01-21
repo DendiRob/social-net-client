@@ -5,7 +5,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import InputSearch from '../../components/InputSearch.vue';
+import { InputSearch } from "shared/ui/inputSearch";
 import { ref } from 'vue';
 
 const searchValue = ref('');

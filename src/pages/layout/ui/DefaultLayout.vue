@@ -10,7 +10,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import TabBar from 'components/TabBar.vue';
+import TabBar from "widgets/TabBar";
 </script>
 <style scoped lang="scss">
 main {
