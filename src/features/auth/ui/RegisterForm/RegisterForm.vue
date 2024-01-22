@@ -103,6 +103,7 @@ function validateForm() {
   return true;
 }
 
+
 async function onSubmit() {
   try {
     const regDto = {
@@ -116,7 +117,7 @@ async function onSubmit() {
 
     
     sessionStore.setAccessToken(tokens.access)
-
+    sessionStore.setUser(response.data)
 
     emailInput.value = '';
     nameInput.value = '';
