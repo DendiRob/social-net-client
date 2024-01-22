@@ -1,8 +1,18 @@
-<template>
+  <template>
   <div class="reg-wrapper">
     <form name="reg-form" class="reg__form" @submit.prevent="onSubmit">
-      <div class="reg__title">Sign in</div>
+      <div class="reg__title">New account</div>
       <div class="reg__inputs">
+        <label class="reg__input reg__input_img" for="addPhoto">
+          <input
+            id="addPhoto"
+            name="addPhoto"
+            type="image"
+            :src="addPhotoUrl"
+            alt="add photo"
+            @click.prevent
+          />
+        </label>
         <Input
           @keydown.space.prevent
           @input="emailInputChecker = false"
@@ -12,30 +22,54 @@
         />
         <Input
           @keydown.space.prevent
+          @input="nameInputChecker = false"
+          :class="['reg__input', { reg__input_warning: nameInputChecker }]"
+          v-model="nameInput"
+          placeholder="Name"
+        />
+        <Input
+          @keydown.space.prevent
           @input="passInputChecker = false"
           :class="['reg__input', { reg__input_warning: passInputChecker }]"
           v-model="passInput"
           placeholder="Password"
         />
+        <Input
+          @keydown.space.prevent
+          @input="confirmInputChecker = false"
+          :class="['reg__input', { reg__input_warning: confirmInputChecker }]"
+          v-model="confirmPassInput"
+          placeholder="Repeat password"
+        />
       </div>
-      <button class="reg__btn" type="submit">Login</button>
-      <RouterLink :to="{ name: 'reg' }" class="reg__loginLink"
-        >Sign up</RouterLink
+      <button class="reg__btn" type="submit">Registration</button>
+      <RouterLink :to="{ name: 'login' }" class="reg__loginLink"
+        >Sign in</RouterLink
       >
     </form>
   </div>
 </template>
 <script setup lang="ts">
 import { ref, type Ref } from 'vue';
-import { login } from 'entities/session/api';
 import Input from 'shared/ui/Input';
+import addPhotoUrl from 'shared/ui/assets/add-photo.svg';
 import axios from 'axios';
+import {SessionModel, SessionApi } from 'entities/session'
+
+
+const sessionStore = SessionModel.useSessionStore()
 
 const emailInput = ref('');
 const emailInputChecker = ref(false);
 
+const nameInput = ref('');
+const nameInputChecker = ref(false);
+
 const passInput = ref('');
 const passInputChecker = ref(false);
+
+const confirmPassInput = ref('');
+const confirmInputChecker = ref(false);
 
 function validateField(value: string, inputChecker: Ref<Boolean>) {
   if (value == '') {
@@ -50,7 +84,9 @@ function validateField(value: string, inputChecker: Ref<Boolean>) {
 function validateForm() {
   const fieldsToValidate = [
     { value: emailInput.value, checker: emailInputChecker },
-    { value: passInput.value, checker: passInputChecker }
+    { value: nameInput.value, checker: nameInputChecker },
+    { value: passInput.value, checker: passInputChecker },
+    { value: confirmPassInput.value, checker: confirmInputChecker }
   ];
 
   const emptyFields = fieldsToValidate.map(({ value, checker }) =>
@@ -59,24 +95,33 @@ function validateForm() {
 
   if (emptyFields.includes(false)) return false;
 
+  if (passInput.value !== confirmPassInput.value) {
+    confirmInputChecker.value = true;
+    return false;
+  }
+
   return true;
 }
 
 async function onSubmit() {
   try {
-    const loginDto = {
+    const regDto = {
       email: emailInput.value,
+      name: nameInput.value,
       password: passInput.value
     };
     if (!validateForm()) return;
-    const response = await login(loginDto);
+    const response = await SessionApi.registration(regDto);
     const tokens = response.data;
 
-    const accessTokenName = import.meta.env.VITE_APP_ACCESS_TOKEN_NAME;
-    localStorage.setItem(accessTokenName, tokens.access);
+    
+    sessionStore.setAccessToken(tokens.access)
+
 
     emailInput.value = '';
+    nameInput.value = '';
     passInput.value = '';
+    confirmPassInput.value = '';
   } catch (error) {
     // заменить на тостер
     if (axios.isAxiosError(error)) {
@@ -84,7 +129,6 @@ async function onSubmit() {
       const newErrors = apiErrors.errors.join('\n');
       alert(newErrors);
     }
-    console.log(error);
   }
 }
 </script>
@@ -98,7 +142,7 @@ async function onSubmit() {
   }
   &__form {
     height: 100%;
-    max-height: 280px;
+    max-height: 470px;
     width: 100%;
     max-width: 320px;
   }
@@ -109,7 +153,7 @@ async function onSubmit() {
     font-weight: 700;
   }
   &__inputs {
-    height: 120px;
+    height: 330px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
