@@ -1,11 +1,7 @@
-import { computed, reactive, ref, toRaw } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import { defineStore } from 'pinia';
 import { useLocalStorage } from 'shared/lib';
 import { accessTokenName } from 'shared/config';
-// import type { UserModel } from '@/entities/User';
-// import { api } from '../api';
-// import { useAlertsStore } from '@/shared/ui/TheAlerts';
-// import useTimeout from '@/shared/lib/use/useTimeout';
 
 const namespaced = 'session';
 
@@ -17,12 +13,10 @@ interface ISessionUser {
 }
 
 export const useSessionStore = defineStore(namespaced, () => {
-  const user = reactive<ISessionUser>({
-    id: undefined,
-    name: '',
-    email: '',
-    uuid: ''
-  });
+  const userId = ref<number | undefined>(undefined);
+  const userEmail = ref('');
+  const userName = ref('');
+  const userUuid = ref('');
 
   const { value: tokenValue, setLSValue: setLSToken } = useLocalStorage(
     accessTokenName,
@@ -39,13 +33,13 @@ export const useSessionStore = defineStore(namespaced, () => {
     setAccessToken('');
   }
 
-  const isAuth = computed(() => Boolean(user.id));
+  const isAuth = computed(() => Boolean(userId.value));
 
   function setUser(data: ISessionUser) {
-    user.id = data.id;
-    user.name = data.name;
-    user.email = data.email;
-    user.uuid = data.uuid;
+    userId.value = data.id;
+    userName.value = data.name;
+    userEmail.value = data.email;
+    userUuid.value = data.uuid;
   }
 
   function logout() {
@@ -61,9 +55,12 @@ export const useSessionStore = defineStore(namespaced, () => {
 
   return {
     setAccessToken,
-    user,
     setUser,
     isAuth,
-    logout
+    logout,
+    userEmail,
+    userId,
+    userName,
+    userUuid
   };
 });

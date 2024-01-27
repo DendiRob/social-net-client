@@ -4,7 +4,7 @@
       <input
         @input="updateValue"
         :value="modelValue"
-        placeholder="Search"
+        placeholder="Поиск"
         type="text"
         class="search__input"
       />

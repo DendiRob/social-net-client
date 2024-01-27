@@ -20,6 +20,9 @@
           <router-link to="/posts" class="tabbar__nav_item">
             <img src="shared/ui/assets/tabbar/postIcon.svg" alt="postpage" />
           </router-link>
+          <router-link to="/settings" class="tabbar__nav_item">
+            <img src="shared/ui/assets/tabbar/settings.svg" alt="settings" />
+          </router-link>
         </li>
       </ul>
     </nav>

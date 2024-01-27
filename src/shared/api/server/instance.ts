@@ -8,3 +8,5 @@ export function createAxiosInstance() {
 
   return instance;
 }
+
+export const api_service = createAxiosInstance(); // вот на это api нужно накинуть интерсепторы, которые будут проверять аутентификацию

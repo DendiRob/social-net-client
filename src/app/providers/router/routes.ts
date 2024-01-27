@@ -25,6 +25,14 @@ export const routes = [
           default: () => import('pages/contacts/ui/ContactsPage'),
           sidebar: () => import('pages/contacts/ui/ContactsSidebar')
         }
+      },
+      {
+        path: '/settings',
+        name: 'settings',
+        components: {
+          default: () => import('pages/settings/ui/SettingsPageMain'),
+          sidebar: () => import('pages/settings/ui/SettingsSidebar')
+        }
       }
     ]
   },

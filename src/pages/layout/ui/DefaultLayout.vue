@@ -10,7 +10,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import TabBar from "widgets/TabBar";
+import TabBar from 'widgets/TabBar';
 </script>
 <style scoped lang="scss">
 main {
