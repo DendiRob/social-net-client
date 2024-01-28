@@ -1,6 +1,16 @@
 import { type AxiosResponse } from 'axios';
 import createAxiosInstance from 'shared/api/server';
-import type { regDtoType, loginDtoType } from 'types/AuthService.types';
+
+export type regDtoType = {
+  email: string;
+  password: string;
+  name: string;
+};
+
+export type loginDtoType = {
+  email: string;
+  password: string;
+};
 
 const AuthApi = createAxiosInstance();
 

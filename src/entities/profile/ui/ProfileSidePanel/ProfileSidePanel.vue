@@ -2,8 +2,8 @@
   <div class="sidePanel__wrapper">
     <img :src="userIcon" alt="user image" class="sidePanel__img" />
     <div class="text__wrapper">
-      <div class="text__name">{{ user.name }}</div>
-      <div class="text__email">{{ user.email }}</div>
+      <div class="text__name">{{ userEmail }}</div>
+      <div class="text__email">{{ userName }}</div>
     </div>
   </div>
 </template>
@@ -30,6 +30,8 @@ const props = withDefaults(defineProps<IProps>(), {
 });
 
 const userIcon = props.user.image ? props.user.image : defaultUserIcon;
+const userEmail = props.user.email ? props.user.email : 'Почта не указана';
+const userName = props.user.name ? props.user.name : 'Имя не указано';
 </script>
 <style scoped lang="scss">
 .sidePanel {

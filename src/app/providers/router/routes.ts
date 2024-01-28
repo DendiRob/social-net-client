@@ -1,3 +1,5 @@
+import profileRoutes from 'entities/profile/profile.routes';
+
 export const routes = [
   {
     path: '/',
@@ -29,10 +31,7 @@ export const routes = [
       {
         path: '/settings',
         name: 'settings',
-        components: {
-          default: () => import('pages/settings/ui/SettingsPageMain'),
-          sidebar: () => import('pages/settings/ui/SettingsSidebar')
-        }
+        children: profileRoutes
       }
     ]
   },

@@ -11,9 +11,9 @@ export const useProfileStore = defineStore(namespaced, () => {
     id: undefined,
     image: '',
     birthDate: '',
-    name: '',
+    name: undefined,
     about: '',
-    email: ''
+    email: undefined
   });
 
   async function getUserProfile(uuid: string) {
