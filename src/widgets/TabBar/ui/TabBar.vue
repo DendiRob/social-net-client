@@ -4,7 +4,7 @@
       <ul class="tabbar__nav">
         <li>
           <router-link
-            to="/"
+            :to="{ name: 'home' }"
             exact-active-class="router-link-active"
             class="tabbar__nav_item"
           >
@@ -12,15 +12,15 @@
           </router-link>
         </li>
         <li>
-          <router-link to="/chats" class="tabbar__nav_item">
+          <router-link :to="{ name: 'chats' }" class="tabbar__nav_item">
             <SvgIcon name="message" />
           </router-link>
         </li>
         <li>
-          <router-link to="/posts" class="tabbar__nav_item">
+          <router-link :to="{ name: 'posts' }" class="tabbar__nav_item">
             <SvgIcon name="postIcon" />
           </router-link>
-          <router-link to="/settings" class="tabbar__nav_item">
+          <router-link :to="{ name: 'settings' }" class="tabbar__nav_item">
             <SvgIcon name="settings" />
           </router-link>
         </li>

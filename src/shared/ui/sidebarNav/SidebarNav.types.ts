@@ -1,7 +1,7 @@
 interface IMenuItem {
   icon: string;
   label: string;
-  url: string;
+  routeName: string;
 }
 
 export interface IMenuItems {

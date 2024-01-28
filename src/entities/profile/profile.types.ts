@@ -11,16 +11,16 @@ export const sidebar_profile_types = {
   editProfile: {
     icon: 'editProfile',
     label: 'Edit profile',
-    url: '/settings/profile-editing'
+    routeName: 'profile-editing'
   },
   communities: {
     icon: 'communities',
     label: 'Communities',
-    url: '/settings/profile-communities'
+    routeName: 'profile-communities'
   },
   inviteFriends: {
     icon: 'inviteFriends',
     label: 'Invite friends',
-    url: '/settings/profile-invite-friends'
+    routeName: 'profile-invite-friends'
   }
 };

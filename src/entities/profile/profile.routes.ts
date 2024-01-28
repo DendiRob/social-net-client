@@ -11,7 +11,7 @@ export default [
     path: 'profile-editing',
     name: 'profile-editing',
     components: {
-      default: () => import('pages/settings/ui/SettingsPageMain'),
+      default: () => import('pages/settings/ui/ProfilePage'),
       sidebar: () => import('pages/settings/ui/SettingsSidebar')
     }
   },
@@ -19,7 +19,7 @@ export default [
     path: 'profile-communities',
     name: 'profile-communities',
     components: {
-      default: () => import('pages/contacts/ui/ContactsPage'),
+      default: () => import('pages/settings/ui/CommunitiesPage'),
       sidebar: () => import('pages/settings/ui/SettingsSidebar')
     }
   },
@@ -27,7 +27,7 @@ export default [
     path: 'profile-invite-friends',
     name: 'profile-invite-friends',
     components: {
-      default: () => import('pages/settings/ui/SettingsPageMain'),
+      default: () => import('pages/settings/ui/InviteFriendsPage'),
       sidebar: () => import('pages/settings/ui/SettingsSidebar')
     }
   }

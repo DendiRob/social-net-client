@@ -2,7 +2,7 @@
   <router-link
     v-for="menu in menuItems"
     :key="menu.label"
-    :to="menu.url"
+    :to="{ name: menu.routeName }"
     class="sidebarNav__nav_item"
   >
     <div class="sidebarNav__wrapper">

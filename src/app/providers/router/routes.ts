@@ -7,6 +7,7 @@ export const routes = [
     children: [
       {
         path: '/',
+        name: 'home',
         components: {
           default: () => import('pages/contacts/ui/ContactsPage'),
           sidebar: () => import('pages/contacts/ui/ContactsSidebar')
@@ -16,16 +17,16 @@ export const routes = [
         path: '/chats',
         name: 'chats',
         components: {
-          default: () => import('pages/contacts/ui/ContactsPage'),
-          sidebar: () => import('pages/contacts/ui/ContactsSidebar')
+          default: () => import('pages/chats/ui/ChatsPage'),
+          sidebar: () => import('pages/chats/ui/ChatsSidebar')
         }
       },
       {
         path: '/posts',
         name: 'posts',
         components: {
-          default: () => import('pages/contacts/ui/ContactsPage'),
-          sidebar: () => import('pages/contacts/ui/ContactsSidebar')
+          default: () => import('pages/posts/ui/PostsPage'),
+          sidebar: () => import('pages/posts/ui/PostsSidebar')
         }
       },
       {
