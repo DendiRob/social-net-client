@@ -8,27 +8,29 @@
             exact-active-class="router-link-active"
             class="tabbar__nav_item"
           >
-            <img src="/shared/ui/assets/tabbar/friends.svg" alt="home" />
+            <SvgIcon name="friends" />
           </router-link>
         </li>
         <li>
           <router-link to="/chats" class="tabbar__nav_item">
-            <img src="/shared/ui/assets/tabbar/message.svg" alt="chat" />
+            <SvgIcon name="message" />
           </router-link>
         </li>
         <li>
           <router-link to="/posts" class="tabbar__nav_item">
-            <img src="/shared/ui/assets/tabbar/postIcon.svg" alt="postpage" />
+            <SvgIcon name="postIcon" />
           </router-link>
           <router-link to="/settings" class="tabbar__nav_item">
-            <img src="/shared/ui/assets/tabbar/settings.svg" alt="settings" />
+            <SvgIcon name="settings" />
           </router-link>
         </li>
       </ul>
     </nav>
   </div>
 </template>
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { SvgIcon } from 'shared/ui/SvgIcon';
+</script>
 <style scoped lang="scss">
 .tabbar {
   min-width: 65px;
@@ -46,6 +48,11 @@
     li {
       width: 100%;
     }
+    .svg-icon {
+      fill: #71747a;
+      width: 24px;
+      height: 24px;
+    }
     &_item {
       box-sizing: border-box;
       width: 100%;
@@ -54,13 +61,13 @@
       justify-content: center;
       align-items: center;
       border-left: 2px solid #dae4f2;
-      img {
-        margin-right: 2px;
-      }
     }
   }
 }
 .router-link-active {
   border-left: 2px solid #248bf2;
+  .svg-icon {
+    fill: #248bf2;
+  }
 }
 </style>
