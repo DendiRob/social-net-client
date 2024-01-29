@@ -17,7 +17,7 @@ export const useProfileStore = defineStore(namespaced, () => {
   });
 
   async function getUserProfile(uuid: string) {
-    const res = await getUserProfileByUuid(uuid);
+    const res = await getUserProfileByUuid(uuid); // TODO: доделать
     profile = res.data;
   }
 
