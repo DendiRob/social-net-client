@@ -5,7 +5,7 @@ export function useLocalStorage(key: string, initialValue: string) {
   const value: string = valueLS ? valueLS : initialValue;
 
   function setLSValue(value: string): void {
-    window.localStorage.setItem(keyLS, JSON.stringify(value));
+    localStorage.setItem(keyLS, value);
   }
 
   return { value, setLSValue };
