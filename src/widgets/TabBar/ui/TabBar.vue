@@ -20,7 +20,7 @@
           <router-link :to="{ name: 'posts' }" class="tabbar__nav_item">
             <SvgIcon name="postIcon" />
           </router-link>
-          <router-link :to="{ name: 'settings' }" class="tabbar__nav_item">
+          <router-link :to="{ name: 'settings-main' }" class="tabbar__nav_item">
             <SvgIcon name="settings" />
           </router-link>
         </li>
