@@ -1,5 +1,6 @@
 import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
+
 import { useLocalStorage } from 'shared/lib';
 import { accessTokenName } from 'shared/config';
 import { SessionApi } from 'entities/session';

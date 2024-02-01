@@ -27,11 +27,15 @@
 </template>
 <script setup lang="ts">
 import { ref, type Ref } from 'vue';
-import { SessionModel, SessionApi } from 'entities/session';
-import Input from 'shared/ui/Input';
-import axios from 'axios';
+import { isAxiosError } from 'axios';
 
+import { SessionModel, SessionApi } from 'entities/session';
+import { UserModel } from 'entities/user';
+import Input from 'shared/ui/Input';
+
+// TODO: переделать валидацию поля и скрыть пароли
 const sessionStore = SessionModel.useSessionStore();
+const userStore = UserModel.useUserStore();
 
 const emailInput = ref('');
 const emailInputChecker = ref(false);
@@ -79,9 +83,13 @@ async function onSubmit() {
 
     emailInput.value = '';
     passInput.value = '';
+
+    window.location.href = userStore.userUrlHistory
+      ? userStore.userUrlHistory
+      : '/';
   } catch (error) {
     // заменить на тостер
-    if (axios.isAxiosError(error)) {
+    if (isAxiosError(error)) {
       const apiErrors = error.response?.data;
       const newErrors = apiErrors.errors.join('\n');
       alert(newErrors);

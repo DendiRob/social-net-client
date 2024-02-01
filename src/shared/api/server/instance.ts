@@ -26,12 +26,13 @@ api_service.interceptors.response.use(
     if (error.response.status === 401) {
       const ok = await api_service.post('/auth/refresh');
       setAccessToken(ok.data.access);
-      console.log(error.config);
+
       if (ok) {
         return await api_service(error.config);
       } else {
         router.push({ name: 'login' });
       }
     }
+    return Promise.reject(error);
   }
 );

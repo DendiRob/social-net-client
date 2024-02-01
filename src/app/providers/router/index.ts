@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { routes } from './routes';
-import { useSessionStore } from 'entities/session/model';
+import { SessionModel } from 'entities/session';
+import { UserModel } from 'entities/user';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -8,13 +9,18 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to) => {
-  const viewerStore = useSessionStore();
+  const viewerStore = SessionModel.useSessionStore();
+  const userStore = UserModel.useUserStore();
 
-  if (to.name === 'login') return;
-
-  if (viewerStore.isAuth) return;
+  userStore.userUrlHistory = to.fullPath;
 
   await viewerStore.getViewer();
+
+  if (to.name === 'login' && !viewerStore.isAuth) return;
+  if (to.name === 'reg' && !viewerStore.isAuth) return;
+
+  if (to.name === 'login' && viewerStore.isAuth) return { name: 'home' };
+  if (to.name === 'reg' && viewerStore.isAuth) return { name: 'home' };
 
   if (viewerStore.isAuth) return;
 

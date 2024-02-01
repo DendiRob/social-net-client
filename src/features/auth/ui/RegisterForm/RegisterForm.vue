@@ -50,13 +50,17 @@
   </div>
 </template>
 <script setup lang="ts">
+// TODO: переделать валидацию поля и скрыть пароли
 import { ref, type Ref } from 'vue';
+import axios from 'axios';
+
 import Input from 'shared/ui/Input';
 import addPhotoUrl from 'shared/ui/assets/add-photo.svg';
-import axios from 'axios';
 import { SessionModel, SessionApi } from 'entities/session';
+import { UserModel } from 'entities/user';
 
 const sessionStore = SessionModel.useSessionStore();
+const userStore = UserModel.useUserStore();
 
 const emailInput = ref('');
 const emailInputChecker = ref(false);
