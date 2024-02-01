@@ -2,10 +2,11 @@ import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
 import { useLocalStorage } from 'shared/lib';
 import { accessTokenName } from 'shared/config';
+import { SessionApi } from 'entities/session';
 
 const namespaced = 'session';
 
-interface ISessionUser {
+interface ISessionData {
   id: number | undefined;
   email: string;
   name: string;
@@ -13,10 +14,10 @@ interface ISessionUser {
 }
 
 export const useSessionStore = defineStore(namespaced, () => {
-  const userId = ref<number | undefined>(undefined);
-  const userEmail = ref('');
-  const userName = ref('');
-  const userUuid = ref('');
+  const viewerId = ref<number | undefined>(undefined);
+  const viewerEmail = ref('');
+  const viewerName = ref('');
+  const viewerUuid = ref('');
 
   const { value: tokenValue, setLSValue: setLSToken } = useLocalStorage(
     accessTokenName,
@@ -29,23 +30,32 @@ export const useSessionStore = defineStore(namespaced, () => {
     setLSToken(value);
   }
 
+  async function getViewer() {
+    try {
+      const res = await SessionApi.getViewer();
+      setViewer(res.data);
+    } catch (error) {
+      console.log(error); // TODO: error handler
+    }
+  }
+
   function removeToken() {
     setAccessToken('');
   }
 
-  const isAuth = computed(() => Boolean(userId.value));
+  const isAuth = computed(() => Boolean(viewerId.value));
 
-  function setUser(data: ISessionUser) {
-    userId.value = data.id;
-    userName.value = data.name;
-    userEmail.value = data.email;
-    userUuid.value = data.uuid;
+  function setViewer(data: ISessionData) {
+    viewerId.value = data.id;
+    viewerName.value = data.name;
+    viewerEmail.value = data.email;
+    viewerUuid.value = data.uuid;
   }
 
   function logout() {
     removeToken();
-    //удалени куки не забыть запрос к серверу
-    setUser({
+    //TODO: удалени куки не забыть запрос к серверу
+    setViewer({
       id: undefined,
       uuid: '',
       name: '',
@@ -55,12 +65,13 @@ export const useSessionStore = defineStore(namespaced, () => {
 
   return {
     setAccessToken,
-    setUser,
+    setViewer,
     isAuth,
     logout,
-    userEmail,
-    userId,
-    userName,
-    userUuid
+    viewerEmail,
+    viewerId,
+    viewerName,
+    viewerUuid,
+    getViewer
   };
 });

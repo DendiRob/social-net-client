@@ -75,7 +75,7 @@ async function onSubmit() {
     const tokens = response.data;
 
     sessionStore.setAccessToken(tokens.access);
-    sessionStore.setUser(response.data);
+    sessionStore.setViewer(response.data);
 
     emailInput.value = '';
     passInput.value = '';

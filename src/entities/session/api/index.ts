@@ -1,5 +1,5 @@
 import { type AxiosResponse } from 'axios';
-import createAxiosInstance from 'shared/api/server';
+import createAxiosInstance, { api_service } from 'shared/api/server';
 
 export type regDtoType = {
   email: string;
@@ -22,7 +22,12 @@ async function login(data: loginDtoType): Promise<AxiosResponse> {
   return await AuthApi.post('/auth/login', data);
 }
 
+async function getViewer() {
+  return await api_service.get('/users/viewer');
+}
+
 export const api = {
   registration,
-  login
+  login,
+  getViewer
 };

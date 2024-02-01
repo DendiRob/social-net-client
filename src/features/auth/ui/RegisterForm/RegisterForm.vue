@@ -1,4 +1,4 @@
-  <template>
+<template>
   <div class="reg-wrapper">
     <form name="reg-form" class="reg__form" @submit.prevent="onSubmit">
       <div class="reg__title">New account</div>
@@ -54,10 +54,9 @@ import { ref, type Ref } from 'vue';
 import Input from 'shared/ui/Input';
 import addPhotoUrl from 'shared/ui/assets/add-photo.svg';
 import axios from 'axios';
-import {SessionModel, SessionApi } from 'entities/session'
+import { SessionModel, SessionApi } from 'entities/session';
 
-
-const sessionStore = SessionModel.useSessionStore()
+const sessionStore = SessionModel.useSessionStore();
 
 const emailInput = ref('');
 const emailInputChecker = ref(false);
@@ -103,7 +102,6 @@ function validateForm() {
   return true;
 }
 
-
 async function onSubmit() {
   try {
     const regDto = {
@@ -115,9 +113,8 @@ async function onSubmit() {
     const response = await SessionApi.registration(regDto);
     const tokens = response.data;
 
-    
-    sessionStore.setAccessToken(tokens.access)
-    sessionStore.setUser(response.data)
+    sessionStore.setAccessToken(tokens.access);
+    sessionStore.setViewer(response.data);
 
     emailInput.value = '';
     nameInput.value = '';
