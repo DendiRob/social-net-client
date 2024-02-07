@@ -28,14 +28,18 @@
 <script setup lang="ts">
 import { ref, type Ref } from 'vue';
 import { isAxiosError } from 'axios';
+import { useRouter } from 'vue-router';
 
 import { SessionModel, SessionApi } from 'entities/session';
 import { UserModel } from 'entities/user';
 import Input from 'shared/ui/Input';
 
 // TODO: переделать валидацию поля и скрыть пароли
+const router = useRouter();
 const sessionStore = SessionModel.useSessionStore();
 const userStore = UserModel.useUserStore();
+
+const urlHistory = userStore.userUrlHistory;
 
 const emailInput = ref('');
 const emailInputChecker = ref(false);
@@ -84,9 +88,9 @@ async function onSubmit() {
     emailInput.value = '';
     passInput.value = '';
 
-    window.location.href = userStore.userUrlHistory
-      ? userStore.userUrlHistory
-      : '/';
+    const routeToPush =
+      urlHistory && urlHistory !== '/login' ? urlHistory : '/';
+    router.push({ path: `${routeToPush}` });
   } catch (error) {
     // заменить на тостер
     if (isAxiosError(error)) {

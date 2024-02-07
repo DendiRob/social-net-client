@@ -12,12 +12,12 @@ router.beforeEach(async (to) => {
   const viewerStore = SessionModel.useSessionStore();
   const userStore = UserModel.useUserStore();
 
-  userStore.userUrlHistory = to.fullPath;
-
   await viewerStore.getViewer();
 
   if (to.name === 'login' && !viewerStore.isAuth) return;
   if (to.name === 'reg' && !viewerStore.isAuth) return;
+
+  userStore.userUrlHistory = to.fullPath;
 
   if (to.name === 'login' && viewerStore.isAuth) return { name: 'home' };
   if (to.name === 'reg' && viewerStore.isAuth) return { name: 'home' };

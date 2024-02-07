@@ -53,15 +53,20 @@ export const useSessionStore = defineStore(namespaced, () => {
     viewerUuid.value = data.uuid;
   }
 
-  function logout() {
-    removeToken();
-    //TODO: удалени куки не забыть запрос к серверу
-    setViewer({
-      id: undefined,
-      uuid: '',
-      name: '',
-      email: ''
-    });
+  async function logout() {
+    try {
+      removeToken();
+      await SessionApi.logout();
+      setViewer({
+        id: undefined,
+        uuid: '',
+        name: '',
+        email: ''
+      });
+    } catch (error) {
+      // TODO: Сделать обработчик ошибок
+      console.log(error);
+    }
   }
 
   return {

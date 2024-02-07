@@ -57,7 +57,9 @@ import axios from 'axios';
 import Input from 'shared/ui/Input';
 import addPhotoUrl from 'shared/ui/assets/add-photo.svg';
 import { SessionModel, SessionApi } from 'entities/session';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const sessionStore = SessionModel.useSessionStore();
 
 const emailInput = ref('');
@@ -117,6 +119,7 @@ async function onSubmit() {
 
     sessionStore.setAccessToken(tokens.access);
     sessionStore.setViewer(response.data);
+    router.push({ name: 'home' });
 
     emailInput.value = '';
     nameInput.value = '';

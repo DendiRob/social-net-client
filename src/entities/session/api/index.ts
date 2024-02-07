@@ -22,6 +22,9 @@ async function login(data: loginDtoType): Promise<AxiosResponse> {
   return await AuthApi.post('/auth/login', data);
 }
 
+async function logout() {
+  return await api_service.post('/auth/logout');
+}
 async function getViewer() {
   return await api_service.get('/users/viewer');
 }
@@ -29,5 +32,6 @@ async function getViewer() {
 export const api = {
   registration,
   login,
-  getViewer
+  getViewer,
+  logout
 };
