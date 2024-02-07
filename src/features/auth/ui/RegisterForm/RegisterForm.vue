@@ -13,28 +13,28 @@
             @click.prevent
           />
         </label>
-        <Input
+        <InputText
           @keydown.space.prevent
           @input="emailInputChecker = false"
           :class="['reg__input', { reg__input_warning: emailInputChecker }]"
           v-model="emailInput"
           placeholder="Email"
         />
-        <Input
+        <InputText
           @keydown.space.prevent
           @input="nameInputChecker = false"
           :class="['reg__input', { reg__input_warning: nameInputChecker }]"
           v-model="nameInput"
           placeholder="Name"
         />
-        <Input
+        <InputText
           @keydown.space.prevent
           @input="passInputChecker = false"
           :class="['reg__input', { reg__input_warning: passInputChecker }]"
           v-model="passInput"
           placeholder="Password"
         />
-        <Input
+        <InputText
           @keydown.space.prevent
           @input="confirmInputChecker = false"
           :class="['reg__input', { reg__input_warning: confirmInputChecker }]"
@@ -54,7 +54,7 @@
 import { ref, type Ref } from 'vue';
 import axios from 'axios';
 
-import Input from 'shared/ui/Input';
+import InputText from 'shared/ui/InputText';
 import addPhotoUrl from 'shared/ui/assets/add-photo.svg';
 import { SessionModel, SessionApi } from 'entities/session';
 import { useRouter } from 'vue-router';

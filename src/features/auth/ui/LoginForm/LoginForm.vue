@@ -3,14 +3,14 @@
     <form name="reg-form" class="reg__form" @submit.prevent="onSubmit">
       <div class="reg__title">Sign in</div>
       <div class="reg__inputs">
-        <Input
+        <InputText
           @keydown.space.prevent
           @input="emailInputChecker = false"
           :class="['reg__input', { reg__input_warning: emailInputChecker }]"
           v-model="emailInput"
           placeholder="Email"
         />
-        <Input
+        <InputText
           @keydown.space.prevent
           @input="passInputChecker = false"
           :class="['reg__input', { reg__input_warning: passInputChecker }]"
@@ -32,7 +32,7 @@ import { useRouter } from 'vue-router';
 
 import { SessionModel, SessionApi } from 'entities/session';
 import { UserModel } from 'entities/user';
-import Input from 'shared/ui/Input';
+import InputText from 'shared/ui/InputText';
 
 // TODO: переделать валидацию поля и скрыть пароли
 const router = useRouter();
@@ -174,3 +174,4 @@ async function onSubmit() {
   }
 }
 </style>
+shared/ui/InputText
