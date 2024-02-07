@@ -1,25 +1,25 @@
 <template>
-  <div class="reg-wrapper">
-    <form name="reg-form" class="reg__form" @submit.prevent="onSubmit">
-      <div class="reg__title">Sign in</div>
-      <div class="reg__inputs">
+  <div class="login-wrapper">
+    <form name="login-form" class="login__form" @submit.prevent="onSubmit">
+      <div class="login__title">Sign in</div>
+      <div class="login__inputs">
         <InputText
           @keydown.space.prevent
           @input="emailInputChecker = false"
-          :class="['reg__input', { reg__input_warning: emailInputChecker }]"
+          :class="['login__input', { login__input_warning: emailInputChecker }]"
           v-model="emailInput"
           placeholder="Email"
         />
         <InputPassword
-          class="reg__input"
+          class="login__input"
           @input="passInputChecker = false"
           v-model="passInput"
           placeholder="Password"
           :warning="passInputChecker"
         />
       </div>
-      <button class="reg__btn" type="submit">Login</button>
-      <RouterLink :to="{ name: 'reg' }" class="reg__loginLink"
+      <button class="login__btn" type="submit">Login</button>
+      <RouterLink :to="{ name: 'reg' }" class="login__loginLink"
         >Sign up</RouterLink
       >
     </form>
@@ -104,7 +104,7 @@ async function onSubmit() {
 }
 </script>
 <style lang="scss" scoped>
-.reg {
+.login {
   &-wrapper {
     display: flex;
     justify-content: center;

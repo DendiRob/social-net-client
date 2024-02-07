@@ -20,7 +20,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 const viewerStore = useSessionStore();
 const profileStore = profileModel.useProfileStore();
-
+// TODO: нужна модалка,которая будет подтверждать,что точно ли пользователь хочет выйти
 async function logout() {
   await viewerStore.logout();
   router.push({ name: 'login' });
