@@ -27,19 +27,19 @@
           v-model="nameInput"
           placeholder="Name"
         />
-        <InputText
-          @keydown.space.prevent
+        <InputPassword
+          class="reg__input"
           @input="passInputChecker = false"
-          :class="['reg__input', { reg__input_warning: passInputChecker }]"
           v-model="passInput"
           placeholder="Password"
+          :warning="passInputChecker"
         />
-        <InputText
-          @keydown.space.prevent
+        <InputPassword
+          class="reg__input"
           @input="confirmInputChecker = false"
-          :class="['reg__input', { reg__input_warning: confirmInputChecker }]"
           v-model="confirmPassInput"
           placeholder="Repeat password"
+          :warning="confirmInputChecker"
         />
       </div>
       <button class="reg__btn" type="submit">Registration</button>
@@ -53,11 +53,12 @@
 // TODO: переделать валидацию поля и скрыть пароли
 import { ref, type Ref } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
+import InputPassword from 'shared/ui/InputPassword';
 import InputText from 'shared/ui/InputText';
 import addPhotoUrl from 'shared/ui/assets/add-photo.svg';
 import { SessionModel, SessionApi } from 'entities/session';
-import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const sessionStore = SessionModel.useSessionStore();

@@ -1,11 +1,11 @@
 <template>
-  <div class="search-wrapper">
+  <div class="inputText-wrapper">
     <input
       @input="updateValue"
       :value="modelValue"
       :placeholder="placeholder"
-      type="text"
-      class="search__input"
+      :type="inputType"
+      class="inputText__input"
     />
   </div>
 </template>
@@ -15,6 +15,10 @@ defineProps({
   placeholder: {
     type: String,
     default: ''
+  },
+  inputType: {
+    type: String,
+    default: () => 'text'
   }
 });
 const emit = defineEmits(['update:modelValue']);
@@ -24,7 +28,7 @@ const updateValue = (e: Event) => {
 };
 </script>
 <style scoped lang="scss">
-.search {
+.inputText {
   width: 100%;
   margin-top: 12px;
   &-wrapper {

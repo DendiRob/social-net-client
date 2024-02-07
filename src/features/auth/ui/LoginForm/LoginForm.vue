@@ -10,12 +10,12 @@
           v-model="emailInput"
           placeholder="Email"
         />
-        <InputText
-          @keydown.space.prevent
+        <InputPassword
+          class="reg__input"
           @input="passInputChecker = false"
-          :class="['reg__input', { reg__input_warning: passInputChecker }]"
           v-model="passInput"
           placeholder="Password"
+          :warning="passInputChecker"
         />
       </div>
       <button class="reg__btn" type="submit">Login</button>
@@ -33,6 +33,7 @@ import { useRouter } from 'vue-router';
 import { SessionModel, SessionApi } from 'entities/session';
 import { UserModel } from 'entities/user';
 import InputText from 'shared/ui/InputText';
+import InputPassword from 'shared/ui/InputPassword';
 
 // TODO: переделать валидацию поля и скрыть пароли
 const router = useRouter();
@@ -85,12 +86,12 @@ async function onSubmit() {
     sessionStore.setAccessToken(tokens.access);
     sessionStore.setViewer(response.data);
 
-    emailInput.value = '';
-    passInput.value = '';
-
     const routeToPush =
       urlHistory && urlHistory !== '/login' ? urlHistory : '/';
     router.push({ path: `${routeToPush}` });
+
+    emailInput.value = '';
+    passInput.value = '';
   } catch (error) {
     // заменить на тостер
     if (isAxiosError(error)) {
