@@ -16,7 +16,7 @@ import TabBar from 'widgets/TabBar';
 main {
   box-sizing: border-box;
   height: 100vh;
-  width: 100%;
+  flex: 1;
   padding: 60px 90px 0 90px;
 }
 .defaultLayout {

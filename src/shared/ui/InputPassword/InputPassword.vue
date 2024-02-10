@@ -1,9 +1,9 @@
 <template>
-  <div :class="['password', { 'password-warning': warning }]">
+  <div :class="['password', { 'password-warning': errorMessage?.length }]">
     <InputText
       @keydown.space.prevent
       @input="updateValue"
-      :modelValue="modelValue"
+      v-model="value"
       :placeholder="placeholder"
       :inputType="currentInputType"
     />
@@ -16,11 +16,13 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, toRaw } from 'vue';
 import { computed } from 'vue';
+import { useField } from 'vee-validate';
+
 import InputText from '../InputText';
 
-defineProps({
+const props = defineProps({
   modelValue: String,
   placeholder: {
     type: String,
@@ -29,16 +31,32 @@ defineProps({
   warning: {
     type: Boolean,
     default: () => false
+  },
+  name: {
+    type: String,
+    default: ''
+  },
+  rules: {
+    type: Object,
+    default: () => ({})
   }
 });
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue', 'input']);
 const switchEye = ref(false);
+
+const { value, errorMessage, validate } = useField(props.name, props.rules, {
+  initialValue: toRaw(props.modelValue)
+});
+
+defineExpose({ validate });
 
 const currentInputType = computed(() =>
   switchEye.value ? 'text' : 'password'
 );
-const updateValue = (e: Event) => {
-  emit('update:modelValue', (e.target as HTMLInputElement).value);
+const updateValue = () => {
+  const val = toRaw(value);
+
+  emit('update:modelValue', val);
 };
 </script>
 <style scoped lang="scss">

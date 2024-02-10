@@ -1,86 +1,61 @@
 <template>
   <div class="login-wrapper">
-    <form name="login-form" class="login__form" @submit.prevent="onSubmit">
+    <Form name="login-form" class="login__form" @submit="onSubmit">
       <div class="login__title">Sign in</div>
       <div class="login__inputs">
         <InputText
           @keydown.space.prevent
-          @input="emailInputChecker = false"
-          :class="['login__input', { login__input_warning: emailInputChecker }]"
-          v-model="emailInput"
-          placeholder="Email"
+          :class="['login__input']"
+          v-bind="inputsForm.fileds.email"
         />
         <InputPassword
           class="login__input"
-          @input="passInputChecker = false"
-          v-model="passInput"
-          placeholder="Password"
-          :warning="passInputChecker"
+          v-bind="inputsForm.fileds.password"
         />
       </div>
       <button class="login__btn" type="submit">Login</button>
       <RouterLink :to="{ name: 'reg' }" class="login__loginLink"
         >Sign up</RouterLink
       >
-    </form>
+    </Form>
   </div>
 </template>
 <script setup lang="ts">
 import { ref, type Ref } from 'vue';
 import { isAxiosError } from 'axios';
 import { useRouter } from 'vue-router';
+import { Form } from 'vee-validate';
 
 import { SessionModel, SessionApi } from 'entities/session';
 import { UserModel } from 'entities/user';
 import InputText from 'shared/ui/InputText';
 import InputPassword from 'shared/ui/InputPassword';
+import { string } from 'yup';
 
-// TODO: переделать валидацию поля и скрыть пароли
 const router = useRouter();
 const sessionStore = SessionModel.useSessionStore();
 const userStore = UserModel.useUserStore();
 
 const urlHistory = userStore.userUrlHistory;
 
-const emailInput = ref('');
-const emailInputChecker = ref(false);
-
-const passInput = ref('');
-const passInputChecker = ref(false);
-
-function validateField(value: string, inputChecker: Ref<Boolean>) {
-  if (value == '') {
-    inputChecker.value = true;
-    return false;
-  } else {
-    inputChecker.value = false;
-    return true;
+const inputsForm = ref({
+  fileds: {
+    email: {
+      name: 'email',
+      placeholder: 'Email',
+      rules: string().email('Неправильный формат почты!').required()
+    },
+    password: {
+      name: 'password',
+      placeholder: 'Password',
+      rules: string().required('Введите пароль')
+    }
   }
-}
+});
 
-function validateForm() {
-  const fieldsToValidate = [
-    { value: emailInput.value, checker: emailInputChecker },
-    { value: passInput.value, checker: passInputChecker }
-  ];
-
-  const emptyFields = fieldsToValidate.map(({ value, checker }) =>
-    validateField(value, checker)
-  );
-
-  if (emptyFields.includes(false)) return false;
-
-  return true;
-}
-
-async function onSubmit() {
+async function onSubmit(values: Record<string, any>) {
   try {
-    const loginDto = {
-      email: emailInput.value,
-      password: passInput.value
-    };
-    if (!validateForm()) return;
-    const response = await SessionApi.login(loginDto);
+    const response = await SessionApi.login(values);
     const tokens = response.data;
 
     sessionStore.setAccessToken(tokens.access);
@@ -89,9 +64,6 @@ async function onSubmit() {
     const routeToPush =
       urlHistory && urlHistory !== '/login' ? urlHistory : '/';
     router.push({ path: `${routeToPush}` });
-
-    emailInput.value = '';
-    passInput.value = '';
   } catch (error) {
     // заменить на тостер
     if (isAxiosError(error)) {

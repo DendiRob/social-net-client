@@ -18,7 +18,7 @@ async function registration(data: regDtoType): Promise<AxiosResponse> {
   return await AuthApi.post('/auth/registration', data);
 }
 
-async function login(data: loginDtoType): Promise<AxiosResponse> {
+async function login(data: Record<string, any>): Promise<AxiosResponse> {
   return await AuthApi.post('/auth/login', data);
 }
 
