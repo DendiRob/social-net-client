@@ -8,6 +8,7 @@
           :class="['login__input']"
           v-bind="inputsForm.fileds.email"
         />
+        <!-- TODO: тоже инпут под yup переделай -->
         <InputPassword
           class="login__input"
           v-bind="inputsForm.fileds.password"
@@ -21,7 +22,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, type Ref } from 'vue';
+import { ref } from 'vue';
 import { isAxiosError } from 'axios';
 import { useRouter } from 'vue-router';
 import { Form } from 'vee-validate';
