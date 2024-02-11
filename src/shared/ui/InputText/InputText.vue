@@ -1,16 +1,25 @@
 <template>
-  <div class="inputText-wrapper">
+  <div
+    :class="[
+      'inputText-wrapper',
+      { 'inputText-wrapper-warning': errorMessage?.length }
+    ]"
+  >
     <input
       @input="updateValue"
-      :value="modelValue"
+      v-model="value"
       :placeholder="placeholder"
       :type="inputType"
       class="inputText__input"
+      autocomplete="on"
     />
   </div>
 </template>
 <script setup lang="ts">
-defineProps({
+import { toRaw } from 'vue';
+import { useField } from 'vee-validate';
+const emit = defineEmits(['update:modelValue', 'input']);
+const props = defineProps({
   modelValue: String,
   placeholder: {
     type: String,
@@ -19,12 +28,26 @@ defineProps({
   inputType: {
     type: String,
     default: () => 'text'
+  },
+  rules: {
+    type: Object,
+    default: () => ({})
+  },
+  name: {
+    type: String,
+    default: ''
   }
 });
-const emit = defineEmits(['update:modelValue']);
+const { value, errorMessage, validate } = useField(props.name, props.rules, {
+  initialValue: toRaw(props.modelValue)
+});
 
-const updateValue = (e: Event) => {
-  emit('update:modelValue', (e.target as HTMLInputElement).value);
+defineExpose({ validate });
+
+const updateValue = () => {
+  const val = toRaw(value);
+  emit('input', val);
+  emit('update:modelValue', val);
 };
 </script>
 <style scoped lang="scss">
@@ -36,6 +59,9 @@ const updateValue = (e: Event) => {
     overflow: hidden;
     border-radius: 8px;
     position: relative;
+    &-warning {
+      border: 1px solid #ff0000;
+    }
   }
   &__input {
     box-sizing: border-box;

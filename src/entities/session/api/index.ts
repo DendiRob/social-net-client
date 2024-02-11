@@ -14,7 +14,7 @@ export type loginDtoType = {
 
 const AuthApi = createAxiosInstance();
 
-async function registration(data: regDtoType): Promise<AxiosResponse> {
+async function registration(data: Record<string, any>): Promise<AxiosResponse> {
   return await AuthApi.post('/auth/registration', data);
 }
 

@@ -1,9 +1,8 @@
 <template>
-  <div :class="['password', { 'password-warning': errorMessage?.length }]">
+  <div :class="['password']">
     <InputText
+      v-bind="props"
       @keydown.space.prevent
-      @input="updateValue"
-      v-model="value"
       :placeholder="placeholder"
       :inputType="currentInputType"
     />
@@ -16,9 +15,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, toRaw } from 'vue';
+import { ref } from 'vue';
 import { computed } from 'vue';
-import { useField } from 'vee-validate';
 
 import InputText from '../InputText';
 
@@ -27,10 +25,6 @@ const props = defineProps({
   placeholder: {
     type: String,
     default: ''
-  },
-  warning: {
-    type: Boolean,
-    default: () => false
   },
   name: {
     type: String,
@@ -41,23 +35,11 @@ const props = defineProps({
     default: () => ({})
   }
 });
-const emit = defineEmits(['update:modelValue', 'input']);
 const switchEye = ref(false);
-
-const { value, errorMessage, validate } = useField(props.name, props.rules, {
-  initialValue: toRaw(props.modelValue)
-});
-
-defineExpose({ validate });
 
 const currentInputType = computed(() =>
   switchEye.value ? 'text' : 'password'
 );
-const updateValue = () => {
-  const val = toRaw(value);
-
-  emit('update:modelValue', val);
-};
 </script>
 <style scoped lang="scss">
 .password {

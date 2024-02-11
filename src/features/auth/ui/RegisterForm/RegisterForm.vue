@@ -1,6 +1,11 @@
 <template>
   <div class="reg-wrapper">
-    <form name="reg-form" class="reg__form" @submit.prevent="onSubmit">
+    <Form
+      name="reg-form"
+      class="reg__form"
+      @submit="onSubmit"
+      :validation-schema="comparePassSchema"
+    >
       <div class="reg__title">New account</div>
       <div class="reg__inputs">
         <label class="reg__input reg__input_img" for="addPhoto">
@@ -15,38 +20,28 @@
         </label>
         <InputText
           @keydown.space.prevent
-          @input="emailInputChecker = false"
-          :class="['reg__input', { reg__input_warning: emailInputChecker }]"
-          v-model="emailInput"
-          placeholder="Email"
+          class="reg__input"
+          v-bind:="inputsForm.fileds.email"
         />
         <InputText
           @keydown.space.prevent
-          @input="nameInputChecker = false"
-          :class="['reg__input', { reg__input_warning: nameInputChecker }]"
-          v-model="nameInput"
-          placeholder="Name"
+          class="reg__input"
+          v-bind:="inputsForm.fileds.name"
         />
         <InputPassword
           class="reg__input"
-          @input="passInputChecker = false"
-          v-model="passInput"
-          placeholder="Password"
-          :warning="passInputChecker"
+          v-bind:="inputsForm.fileds.password"
         />
         <InputPassword
           class="reg__input"
-          @input="confirmInputChecker = false"
-          v-model="confirmPassInput"
-          placeholder="Repeat password"
-          :warning="confirmInputChecker"
+          v-bind:="inputsForm.fileds.confPassword"
         />
       </div>
       <button class="reg__btn" type="submit">Registration</button>
       <RouterLink :to="{ name: 'login' }" class="reg__loginLink"
         >Sign in</RouterLink
       >
-    </form>
+    </Form>
   </div>
 </template>
 <script setup lang="ts">
@@ -54,78 +49,59 @@
 import { ref, type Ref } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import { Form } from 'vee-validate';
 
 import InputPassword from 'shared/ui/InputPassword';
 import InputText from 'shared/ui/InputText';
 import addPhotoUrl from 'shared/ui/assets/add-photo.svg';
 import { SessionModel, SessionApi } from 'entities/session';
+import * as yup from 'yup';
 
 const router = useRouter();
 const sessionStore = SessionModel.useSessionStore();
 
-const emailInput = ref('');
-const emailInputChecker = ref(false);
+const comparePassSchema = yup.object({
+  password: yup.string().required('Введите пароль!'),
+  confPassword: yup
+    .string()
+    .required('Введите пароль ещё раз!')
+    .oneOf([yup.ref('password')], 'Пароли не совпадают'),
+  email: yup
+    .string()
+    .required('Введите почту')
+    .email('Неправильный формат почты!'),
+  name: yup.string().required('Укажите ваш ник!')
+});
 
-const nameInput = ref('');
-const nameInputChecker = ref(false);
-
-const passInput = ref('');
-const passInputChecker = ref(false);
-
-const confirmPassInput = ref('');
-const confirmInputChecker = ref(false);
-
-function validateField(value: string, inputChecker: Ref<Boolean>) {
-  if (value == '') {
-    inputChecker.value = true;
-    return false;
-  } else {
-    inputChecker.value = false;
-    return true;
+const inputsForm = ref({
+  fileds: {
+    email: {
+      name: 'email',
+      placeholder: 'Почта'
+    },
+    name: {
+      name: 'name',
+      placeholder: 'Ваш ник'
+    },
+    password: {
+      name: 'password',
+      placeholder: 'Пароль'
+    },
+    confPassword: {
+      name: 'confPassword',
+      placeholder: 'Подтвердите пароль'
+    }
   }
-}
+});
 
-function validateForm() {
-  const fieldsToValidate = [
-    { value: emailInput.value, checker: emailInputChecker },
-    { value: nameInput.value, checker: nameInputChecker },
-    { value: passInput.value, checker: passInputChecker },
-    { value: confirmPassInput.value, checker: confirmInputChecker }
-  ];
-
-  const emptyFields = fieldsToValidate.map(({ value, checker }) =>
-    validateField(value, checker)
-  );
-
-  if (emptyFields.includes(false)) return false;
-
-  if (passInput.value !== confirmPassInput.value) {
-    confirmInputChecker.value = true;
-    return false;
-  }
-
-  return true;
-}
-
-async function onSubmit() {
+async function onSubmit(value: Record<string, any>) {
   try {
-    const regDto = {
-      email: emailInput.value,
-      name: nameInput.value,
-      password: passInput.value
-    };
-    if (!validateForm()) return;
-    const response = await SessionApi.registration(regDto);
+    const response = await SessionApi.registration(value);
     const tokens = response.data;
 
     sessionStore.setAccessToken(tokens.access);
     sessionStore.setViewer(response.data);
     router.push({ name: 'home' });
-
-    emailInput.value = '';
-    nameInput.value = '';
-    passInput.value = '';
-    confirmPassInput.value = '';
   } catch (error) {
     // заменить на тостер
     if (axios.isAxiosError(error)) {

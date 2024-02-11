@@ -8,7 +8,6 @@
           :class="['login__input']"
           v-bind="inputsForm.fileds.email"
         />
-        <!-- TODO: тоже инпут под yup переделай -->
         <InputPassword
           class="login__input"
           v-bind="inputsForm.fileds.password"
@@ -44,7 +43,7 @@ const inputsForm = ref({
     email: {
       name: 'email',
       placeholder: 'Email',
-      rules: string().email('Неправильный формат почты!').required()
+      rules: string().required().email('Неправильный формат почты!')
     },
     password: {
       name: 'password',
@@ -148,4 +147,3 @@ async function onSubmit(values: Record<string, any>) {
   }
 }
 </style>
-shared/ui/InputText
