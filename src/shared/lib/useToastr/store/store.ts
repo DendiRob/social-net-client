@@ -12,7 +12,6 @@ const namespace = 'notificationToastr';
 
 export const useToastr = defineStore(namespace, () => {
   const toastersTasks = ref<IToasterInfo[]>([]);
-  const isLoading = ref(false);
   const duration = 5000;
 
   const deleteToaster = (id: number) => {
@@ -55,7 +54,6 @@ export const useToastr = defineStore(namespace, () => {
     success,
     error,
     toastersTasks,
-    isLoading,
     deleteToaster
   };
 });

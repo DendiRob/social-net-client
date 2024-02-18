@@ -43,6 +43,7 @@
       >
     </Form>
   </div>
+  <CustomLoader v-if="isLoading" />
   <ToastrModal />
 </template>
 <script setup lang="ts">
@@ -77,6 +78,7 @@ const comparePassSchema = yup.object({
   name: yup.string().required('Укажите ваш ник!')
 });
 
+const isLoading = ref(false);
 const inputsForm = ref({
   fileds: {
     email: {
@@ -100,6 +102,7 @@ const inputsForm = ref({
 
 async function onSubmit(value: Record<string, any>) {
   try {
+    isLoading.value = true;
     const response = await SessionApi.registration(value);
     const tokens = response.data;
 
@@ -117,6 +120,8 @@ async function onSubmit(value: Record<string, any>) {
       return toastr.error({ text: errorText });
     }
     return toastr.error({ text: 'Что-то пошло не так' });
+  } finally {
+    isLoading.value = false;
   }
 }
 </script>

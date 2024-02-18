@@ -1,13 +1,15 @@
 import 'virtual:svg-icons-register';
 
 import DefaultLayout from 'pages/layout';
-
-import type { App } from 'app/index.types';
 import { SvgIcon } from 'shared/ui/SvgIcon';
 import SidebarTitle from 'shared/ui/sidebarTitle';
+import CustomLoader from 'shared/ui/customLoader';
+
+import type { App } from 'app/index.types';
 
 export default function usePlugins(app: App) {
   app.component('default-layout', DefaultLayout);
   app.component('SvgIcon', SvgIcon);
   app.component('SidebarTitle', SidebarTitle);
+  app.component('CustomLoader', CustomLoader);
 }

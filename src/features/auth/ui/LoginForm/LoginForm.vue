@@ -18,6 +18,7 @@
         >Sign up</RouterLink
       >
     </Form>
+    <CustomLoader v-if="isLoading" />
   </div>
   <ToastrModal />
 </template>
@@ -41,6 +42,7 @@ const userStore = UserModel.useUserStore();
 const toastr = useToastr();
 
 const urlHistory = userStore.userUrlHistory;
+const isLoading = ref(false);
 
 const inputsForm = ref({
   fileds: {
@@ -59,6 +61,7 @@ const inputsForm = ref({
 
 async function onSubmit(values: Record<string, any>) {
   try {
+    isLoading.value = true;
     const response = await SessionApi.login(values);
     const tokens = response.data;
 
@@ -68,7 +71,6 @@ async function onSubmit(values: Record<string, any>) {
     const routeToPush =
       urlHistory && urlHistory !== '/login' ? urlHistory : '/';
     await router.push({ path: `${routeToPush}` });
-
     toastr.success({ status: 'Вход', text: 'Вы успешно вошли в аккаунт!' });
   } catch (error) {
     if (isAxiosError(error)) {
@@ -77,6 +79,8 @@ async function onSubmit(values: Record<string, any>) {
       return toastr.error({ text: errorText });
     }
     return toastr.error({ text: 'Что-то пошло не так' });
+  } finally {
+    isLoading.value = false;
   }
 }
 </script>
@@ -87,12 +91,18 @@ async function onSubmit(values: Record<string, any>) {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    background: rgba(0, 0, 0, 0.1);
   }
   &__form {
+    padding: 24px;
     height: 100%;
+    border-radius: 15px;
+    overflow: hidden;
     max-height: 280px;
     width: 100%;
     max-width: 320px;
+    position: relative;
+    background-color: #fff;
   }
   &__title {
     color: #171a1f;
