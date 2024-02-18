@@ -15,8 +15,8 @@ defineProps({
 
 <style scoped>
 .svg-icon {
-  width: 20px;
-  height: 20px;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
 }
 </style>

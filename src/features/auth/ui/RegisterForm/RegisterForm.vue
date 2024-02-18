@@ -43,23 +43,27 @@
       >
     </Form>
   </div>
+  <ToastrModal />
 </template>
 <script setup lang="ts">
-// TODO: переделать валидацию поля и скрыть пароли
-import { ref, type Ref } from 'vue';
+import { ref } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { Form } from 'vee-validate';
+import * as yup from 'yup';
 
 import InputPassword from 'shared/ui/InputPassword';
+import ToastrModal from 'shared/ui/toastrModel';
 import InputText from 'shared/ui/InputText';
 import addPhotoUrl from 'shared/ui/assets/add-photo.svg';
+import useToastr from 'shared/lib/useToastr';
 import { SessionModel, SessionApi } from 'entities/session';
-import * as yup from 'yup';
 
 const router = useRouter();
 const sessionStore = SessionModel.useSessionStore();
+const toastr = useToastr();
 
+// TODO: Указывать сообщения об ошибке сверху поля
 const comparePassSchema = yup.object({
   password: yup.string().required('Введите пароль!'),
   confPassword: yup
@@ -101,14 +105,18 @@ async function onSubmit(value: Record<string, any>) {
 
     sessionStore.setAccessToken(tokens.access);
     sessionStore.setViewer(response.data);
-    router.push({ name: 'home' });
+    await router.push({ name: 'home' });
+    toastr.success({
+      status: 'Регистрация',
+      text: 'Регистрация прошла успешно!'
+    });
   } catch (error) {
-    // заменить на тостер
     if (axios.isAxiosError(error)) {
       const apiErrors = error.response?.data;
-      const newErrors = apiErrors.errors.join('\n');
-      alert(newErrors);
+      const errorText = apiErrors.payload[0];
+      return toastr.error({ text: errorText });
     }
+    return toastr.error({ text: 'Что-то пошло не так' });
   }
 }
 </script>
@@ -184,3 +192,4 @@ async function onSubmit(value: Record<string, any>) {
   }
 }
 </style>
+shared/ui/toastrModel

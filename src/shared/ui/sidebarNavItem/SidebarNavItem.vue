@@ -27,6 +27,8 @@ defineProps(['iconName', 'itemLabel']);
   &__icon {
     margin-right: 16px;
     color: #71747a;
+    max-width: 20px;
+    max-height: 20px;
   }
   &__label {
     color: #171a1f;

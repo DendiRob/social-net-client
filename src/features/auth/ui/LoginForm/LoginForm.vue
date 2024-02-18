@@ -19,22 +19,26 @@
       >
     </Form>
   </div>
+  <ToastrModal />
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
 import { isAxiosError } from 'axios';
 import { useRouter } from 'vue-router';
 import { Form } from 'vee-validate';
+import { string } from 'yup';
 
 import { SessionModel, SessionApi } from 'entities/session';
 import { UserModel } from 'entities/user';
+import ToastrModal from 'shared/ui/toastrModel';
 import InputText from 'shared/ui/InputText';
 import InputPassword from 'shared/ui/InputPassword';
-import { string } from 'yup';
+import useToastr from 'shared/lib/useToastr';
 
 const router = useRouter();
 const sessionStore = SessionModel.useSessionStore();
 const userStore = UserModel.useUserStore();
+const toastr = useToastr();
 
 const urlHistory = userStore.userUrlHistory;
 
@@ -60,18 +64,19 @@ async function onSubmit(values: Record<string, any>) {
 
     sessionStore.setAccessToken(tokens.access);
     sessionStore.setViewer(response.data);
-
+    // TODO: Надо сделать страницу 404 ,потом поставить ограничения,иначе будет после логинки на неё перекидывать
     const routeToPush =
       urlHistory && urlHistory !== '/login' ? urlHistory : '/';
-    router.push({ path: `${routeToPush}` });
+    await router.push({ path: `${routeToPush}` });
+
+    toastr.success({ status: 'Вход', text: 'Вы успешно вошли в аккаунт!' });
   } catch (error) {
-    // заменить на тостер
     if (isAxiosError(error)) {
       const apiErrors = error.response?.data;
-      const newErrors = apiErrors.errors.join('\n');
-      alert(newErrors);
+      const errorText = apiErrors.payload[0];
+      return toastr.error({ text: errorText });
     }
-    console.log(error);
+    return toastr.error({ text: 'Что-то пошло не так' });
   }
 }
 </script>

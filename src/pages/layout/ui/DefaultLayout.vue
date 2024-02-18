@@ -7,10 +7,12 @@
     <main>
       <router-view class="main"></router-view>
     </main>
+    <ToastrModal />
   </div>
 </template>
 <script setup lang="ts">
 import TabBar from 'widgets/TabBar';
+import ToastrModal from 'shared/ui/toastrModel';
 </script>
 <style scoped lang="scss">
 main {
@@ -33,3 +35,4 @@ main {
   padding-top: 10px;
 }
 </style>
+shared/ui/toastrModel
