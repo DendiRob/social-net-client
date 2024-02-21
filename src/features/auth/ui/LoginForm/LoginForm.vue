@@ -70,7 +70,7 @@ async function onSubmit(values: Record<string, any>) {
     // TODO: Надо сделать страницу 404 ,потом поставить ограничения,иначе будет после логинки на неё перекидывать
     const routeToPush =
       urlHistory && urlHistory !== '/login' ? urlHistory : '/';
-    await router.push({ path: `${routeToPush}` });
+    await router.push({ path: routeToPush });
     toastr.success({ status: 'Вход', text: 'Вы успешно вошли в аккаунт!' });
   } catch (error) {
     if (isAxiosError(error)) {
