@@ -55,7 +55,8 @@ export const useToastr = defineStore(namespace, () => {
       {
         status: data.status ?? 'Ошибка',
         text: data.text ?? '',
-        isError: true
+        isError: true,
+        id: getRandom()
       },
       duration
     );

@@ -119,7 +119,7 @@ async function onSubmit(value: Record<string, any>) {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const apiErrors = error.response?.data;
-      const errorText = apiErrors.payload[0];
+      const errorText = apiErrors?.payload[0] ?? 'Что-то пошло не так!';
       return toastr.error({ text: errorText });
     }
     return toastr.error({ text: 'Что-то пошло не так' });

@@ -47,7 +47,7 @@ const toastrStore = useToastr();
   }
   &__item {
     width: 400px;
-    min-height: 130px;
+    min-height: 80px;
     background-color: #f2f3f5;
     border-radius: 12px;
     margin-bottom: 10px;
