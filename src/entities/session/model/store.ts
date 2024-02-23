@@ -4,6 +4,7 @@ import { defineStore } from 'pinia';
 import { useLocalStorage } from 'shared/lib';
 import { accessTokenName } from 'shared/config';
 import { SessionApi } from 'entities/session';
+import { AxiosError, isAxiosError } from 'axios';
 
 const namespaced = 'session';
 
@@ -64,8 +65,9 @@ export const useSessionStore = defineStore(namespaced, () => {
         email: ''
       });
     } catch (error) {
-      // TODO: Сделать обработчик ошибок
-      console.log(error);
+      if (isAxiosError(error)) {
+        throw new AxiosError();
+      }
     }
   }
 
