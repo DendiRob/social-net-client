@@ -26,7 +26,7 @@
               btnStyle="warning"
               :isLoading="isLoading"
             >
-              Подтвердить
+              {{ confirmBtn }}
             </custom-btn>
           </div>
         </div>
@@ -51,6 +51,10 @@ const props = defineProps({
   isLoading: {
     type: Boolean,
     default: null
+  },
+  confirmBtn: {
+    type: String,
+    default: 'Подтвердить'
   }
 });
 
