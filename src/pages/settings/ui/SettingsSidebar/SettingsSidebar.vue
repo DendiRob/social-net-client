@@ -3,11 +3,7 @@
     <SidebarTitle>Настройки</SidebarTitle>
     <ProfileSidePanel :user="profileStore.profile" />
     <SidebarNav :menuItems="sidebar_profile_types" />
-    <ConfirmModal
-      ref="confirmModalRef"
-      :isLoading="isLoading"
-      @confirm="logout"
-    >
+    <ConfirmModal :isLoading="isLoading" @confirm="logout">
       <SidebarNavItem iconName="logout" itemLabel="Выйти" />
     </ConfirmModal>
   </div>
@@ -39,8 +35,6 @@ async function logout() {
 
     await viewerStore.logout();
 
-    isLoading.value = false;
-
     router.push({ name: 'login' });
   } catch (error) {
     if (isAxiosError(error)) {
@@ -49,10 +43,9 @@ async function logout() {
       return toastr.error({ text: errorText });
     }
   } finally {
-    confirmModalRef.value.closeModal();
+    isLoading.value = false;
   }
 }
-const confirmModalRef = ref();
 
 onMounted(async () => {
   //TODO: сделать запрос

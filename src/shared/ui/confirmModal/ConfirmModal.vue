@@ -14,14 +14,14 @@
             <custom-btn
               :style="'cancel'"
               size="large"
-              @click="closeModal()"
+              @click="isActive = false"
               class="cancel"
             >
               Отмена
             </custom-btn>
             <custom-btn
               class="confirm"
-              @click="emits('confirm')"
+              @click="confirmHandler()"
               size="large"
               btnStyle="warning"
               :isLoading="isLoading"
@@ -36,10 +36,10 @@
 </template>
 <script setup lang="ts">
 import CustomBtn from 'shared/ui/customBtn';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 const emits = defineEmits(['confirm']);
-defineProps({
+const props = defineProps({
   title: {
     type: String,
     default: 'Подтвердите своё действие'
@@ -50,17 +50,29 @@ defineProps({
   },
   isLoading: {
     type: Boolean,
-    default: false
+    default: null
   }
 });
 
-function closeModal() {
-  isActive.value = false;
-}
-
+const isConfirm = ref(false);
 const isActive = ref(false);
 
-defineExpose({ closeModal });
+watch(
+  () => props.isLoading,
+  (newVal, prevVal) => {
+    if (newVal === false && prevVal && isConfirm) {
+      isActive.value = false;
+    }
+  }
+);
+
+function confirmHandler() {
+  isConfirm.value = true;
+  emits('confirm');
+  if (props.isLoading === null) {
+    isActive.value = false;
+  }
+}
 </script>
 <style scoped lang="scss">
 .confirm {
