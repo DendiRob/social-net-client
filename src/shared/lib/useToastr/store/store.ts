@@ -8,46 +8,57 @@ interface IToasterInfo {
   id?: number;
 }
 
+function getRandom() {
+  return Math.random();
+}
+
 const namespace = 'notificationToastr';
 
 export const useToastr = defineStore(namespace, () => {
   const toastersTasks = ref<IToasterInfo[]>([]);
-  const duration = 5000;
+  const defaultDuration = 5000;
 
   const deleteToaster = (id: number) => {
-    toastersTasks.value = toastersTasks.value.filter((i) => i.id !== id);
+    const indexlEl = toastersTasks.value.findIndex((i) => i.id === id);
+    toastersTasks.value.splice(indexlEl, 1);
   };
 
-  const setToaster = (data: IToasterInfo) => {
+  const setToaster = (data: IToasterInfo, duration = defaultDuration) => {
     const payload = {
       isError: data.isError,
       status: data.status,
-      text: data.text
+      text: data.text,
+      id: data.id
     };
 
     toastersTasks.value.push(payload);
-    const toastId = toastersTasks.value.length - 1;
-    toastersTasks.value[toastId].id = toastId;
 
     setTimeout(() => {
-      deleteToaster(toastId);
+      deleteToaster(payload.id as number);
     }, duration);
   };
 
-  const success = (data: IToasterInfo) => {
-    setToaster({
-      status: data.status ?? 'Успешно!',
-      text: data.text ?? '',
-      isError: false
-    });
+  const success = (data: IToasterInfo, duration?: number) => {
+    setToaster(
+      {
+        status: data.status ?? 'Успешно!',
+        text: data.text ?? '',
+        isError: false,
+        id: getRandom()
+      },
+      duration
+    );
   };
 
-  const error = (data: IToasterInfo) => {
-    setToaster({
-      status: data.status ?? 'Ошибка',
-      text: data.text ?? '',
-      isError: true
-    });
+  const error = (data: IToasterInfo, duration?: number) => {
+    setToaster(
+      {
+        status: data.status ?? 'Ошибка',
+        text: data.text ?? '',
+        isError: true
+      },
+      duration
+    );
   };
 
   return {

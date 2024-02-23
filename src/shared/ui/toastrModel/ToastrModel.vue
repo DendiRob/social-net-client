@@ -5,8 +5,8 @@
         <div
           @click="toastrStore.deleteToaster(item.id as number)"
           class="toastr__item"
-          v-for="(item, index) in toastrStore.toastersTasks"
-          :key="index"
+          v-for="item in toastrStore.toastersTasks"
+          :key="item.id"
         >
           <div class="toastr__item_title">
             <div class="icon">
@@ -43,6 +43,7 @@ const toastrStore = useToastr();
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
   }
   &__item {
     width: 400px;
@@ -87,13 +88,11 @@ const toastrStore = useToastr();
 .list-leave-active {
   transition: all 0.5s ease;
 }
-.list-enter-from,
-.list-leave-to {
-  opacity: 0;
+.list-enter-from {
   transform: translateY(100%);
 }
-
-.list-move {
-  transition: transform 0.2s ease;
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(100%);
 }
 </style>

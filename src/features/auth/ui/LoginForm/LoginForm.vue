@@ -71,7 +71,10 @@ async function onSubmit(values: Record<string, any>) {
     const routeToPush =
       urlHistory && urlHistory !== '/login' ? urlHistory : '/';
     await router.push({ path: routeToPush });
-    toastr.success({ status: 'Вход', text: 'Вы успешно вошли в аккаунт!' });
+    toastr.success(
+      { status: 'Вход', text: 'Вы успешно вошли в аккаунт!' },
+      3000
+    );
   } catch (error) {
     if (isAxiosError(error)) {
       const apiErrors = error.response?.data;

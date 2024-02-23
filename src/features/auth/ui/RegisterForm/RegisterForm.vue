@@ -109,10 +109,13 @@ async function onSubmit(value: Record<string, any>) {
     sessionStore.setAccessToken(tokens.access);
     sessionStore.setViewer(response.data);
     await router.push({ name: 'home' });
-    toastr.success({
-      status: 'Регистрация',
-      text: 'Регистрация прошла успешно!'
-    });
+    toastr.success(
+      {
+        status: 'Регистрация',
+        text: 'Регистрация прошла успешно!'
+      },
+      3000
+    );
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const apiErrors = error.response?.data;
@@ -132,12 +135,16 @@ async function onSubmit(value: Record<string, any>) {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    background: rgba(0, 0, 0, 0.1);
   }
   &__form {
     height: 100%;
     max-height: 470px;
     width: 100%;
     max-width: 320px;
+    padding: 24px;
+    background-color: #fff;
+    border-radius: 15px;
   }
   &__title {
     color: #171a1f;
