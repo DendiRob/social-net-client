@@ -3,7 +3,11 @@
     <SidebarTitle>Настройки</SidebarTitle>
     <ProfileSidePanel :user="profileStore.profile" />
     <SidebarNav :menuItems="sidebar_profile_types" />
-    <ConfirmModal ref="confirmModalRef" @confirm="logout">
+    <ConfirmModal
+      ref="confirmModalRef"
+      :isLoading="isLoading"
+      @confirm="logout"
+    >
       <SidebarNavItem iconName="logout" itemLabel="Выйти" />
     </ConfirmModal>
   </div>
@@ -27,13 +31,15 @@ const viewerStore = useSessionStore();
 const profileStore = profileModel.useProfileStore();
 const toastr = useToastr();
 
+const isLoading = ref(false);
+
 async function logout() {
   try {
-    confirmModalRef.value.isLoading = true;
+    isLoading.value = true;
 
     await viewerStore.logout();
 
-    confirmModalRef.value.isLoading = false;
+    isLoading.value = false;
 
     router.push({ name: 'login' });
   } catch (error) {
@@ -43,7 +49,7 @@ async function logout() {
       return toastr.error({ text: errorText });
     }
   } finally {
-    confirmModalRef.value.isActive = false;
+    confirmModalRef.value.closeModal();
   }
 }
 const confirmModalRef = ref();

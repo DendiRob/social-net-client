@@ -14,7 +14,7 @@
             <custom-btn
               :style="'cancel'"
               size="large"
-              @click="isActive = false"
+              @click="closeModal()"
               class="cancel"
             >
               Отмена
@@ -47,13 +47,20 @@ defineProps({
   warning: {
     type: String,
     default: ''
+  },
+  isLoading: {
+    type: Boolean,
+    default: false
   }
 });
 
-const isActive = ref(false);
-const isLoading = ref(false);
+function closeModal() {
+  isActive.value = false;
+}
 
-defineExpose({ isActive, isLoading });
+const isActive = ref(false);
+
+defineExpose({ closeModal });
 </script>
 <style scoped lang="scss">
 .confirm {
