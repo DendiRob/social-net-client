@@ -13,17 +13,21 @@
           <div class="confirm__btns">
             <custom-btn
               :style="'cancel'"
+              size="large"
               @click="isActive = false"
               class="cancel"
-              >Отмена</custom-btn
             >
+              Отмена
+            </custom-btn>
             <custom-btn
               class="confirm"
               @click="emits('confirm')"
               size="large"
               btnStyle="warning"
-              >Подтвердить</custom-btn
+              :isLoading="isLoading"
             >
+              Подтвердить
+            </custom-btn>
           </div>
         </div>
       </div>
@@ -47,6 +51,9 @@ defineProps({
 });
 
 const isActive = ref(false);
+const isLoading = ref(false);
+
+defineExpose({ isActive, isLoading });
 </script>
 <style scoped lang="scss">
 .confirm {
