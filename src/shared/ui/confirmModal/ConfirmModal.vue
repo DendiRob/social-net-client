@@ -1,37 +1,59 @@
 <template>
-  <teleport to="body"
-    ><div class="confirm-overlay">
-      <div class="confirm__wrapper">
-        <div class="confirm__top">
-          <div class="question">{{ title }}</div>
-          <div class="warning">{{ warning }}</div>
-        </div>
-        <div class="confirm__btns">
-          <div class="cancel">Отменить</div>
-          <div class="confirm">Подтвердить</div>
+  <div>
+    <div class="trigger" @click="isActive = true">
+      <slot></slot>
+    </div>
+    <teleport to="body">
+      <div :class="['confirm-overlay', { isActive }]">
+        <div class="confirm__wrapper">
+          <div class="confirm__top">
+            <div class="question">{{ title }}</div>
+            <div class="warning">{{ warning }}</div>
+          </div>
+          <div class="confirm__btns">
+            <custom-btn
+              :style="'cancel'"
+              @click="isActive = false"
+              class="cancel"
+              >Отмена</custom-btn
+            >
+            <custom-btn
+              class="confirm"
+              @click="emits('confirm')"
+              size="large"
+              btnStyle="warning"
+              >Подтвердить</custom-btn
+            >
+          </div>
         </div>
       </div>
-    </div></teleport
-  >
+    </teleport>
+  </div>
 </template>
 <script setup lang="ts">
+import CustomBtn from 'shared/ui/customBtn';
+import { ref } from 'vue';
+
+const emits = defineEmits(['confirm']);
 defineProps({
   title: {
     type: String,
-    default: 'Подтвердите своё действие.'
+    default: 'Подтвердите своё действие'
   },
   warning: {
     type: String,
     default: ''
   }
 });
+
+const isActive = ref(false);
 </script>
 <style scoped lang="scss">
 .confirm {
   &-overlay {
     width: 100%;
     height: 100vh;
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
     position: absolute;
@@ -68,6 +90,12 @@ defineProps({
     background: #f2f3f5;
     padding: 1.07rem 1.7rem;
     height: 100%;
+    display: flex;
+    justify-content: flex-end;
   }
+}
+
+.isActive {
+  display: flex;
 }
 </style>

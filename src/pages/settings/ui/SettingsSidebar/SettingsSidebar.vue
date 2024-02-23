@@ -3,8 +3,9 @@
     <SidebarTitle>Настройки</SidebarTitle>
     <ProfileSidePanel :user="profileStore.profile" />
     <SidebarNav :menuItems="sidebar_profile_types" />
-    <SidebarNavItem iconName="logout" itemLabel="Выйти" @click="logout" />
-    <ConfirmModal />
+    <ConfirmModal @confirm="logout">
+      <SidebarNavItem iconName="logout" itemLabel="Выйти" />
+    </ConfirmModal>
   </div>
 </template>
 <script setup lang="ts">

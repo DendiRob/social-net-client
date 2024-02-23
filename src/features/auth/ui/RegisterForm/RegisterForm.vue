@@ -138,8 +138,6 @@ async function onSubmit(value: Record<string, any>) {
     background: rgba(0, 0, 0, 0.1);
   }
   &__form {
-    height: 100%;
-    max-height: 470px;
     width: 100%;
     max-width: 320px;
     padding: 24px;
