@@ -8,16 +8,21 @@
     >
       <div class="reg__title">New account</div>
       <div class="reg__inputs">
-        <label class="reg__input reg__input_img" for="addPhoto">
-          <input
-            id="addPhoto"
-            name="addPhoto"
-            type="image"
-            :src="addPhotoUrl"
-            alt="add photo"
-            @click.prevent
+        <div class="reg__input reg__input_img" @click="imageInput?.click">
+          <img
+            :src="avatarUrl"
+            alt="avatar"
+            :class="{ defaultAvatar: !selectedAvatar }"
           />
-        </label>
+          <input
+            class="input-hidden"
+            type="file"
+            accept=".png,.jpg,.jpeg"
+            ref="imageInput"
+            alt="set avatar"
+            @change="setAvatar"
+          />
+        </div>
         <InputText
           @keydown.space.prevent
           class="reg__input"
@@ -47,7 +52,7 @@
   <ToastrModal />
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { Form } from 'vee-validate';
@@ -56,13 +61,70 @@ import * as yup from 'yup';
 import InputPassword from 'shared/ui/InputPassword';
 import ToastrModal from 'shared/ui/toastrModel';
 import InputText from 'shared/ui/InputText';
-import addPhotoUrl from 'shared/ui/assets/add-photo.svg';
+import addPhoto from 'shared/ui/assets/add-photo.svg';
 import useToastr from 'shared/lib/useToastr';
 import { SessionModel, SessionApi } from 'entities/session';
 
 const router = useRouter();
 const sessionStore = SessionModel.useSessionStore();
 const toastr = useToastr();
+
+const isLoading = ref(false);
+const imageInput = ref<HTMLInputElement>();
+const selectedAvatar = ref<unknown>(null);
+
+const avatarUrl = computed(() => {
+  if (selectedAvatar.value === null) {
+    return addPhoto;
+  } else {
+    return URL.createObjectURL(selectedAvatar.value as Blob | MediaSource);
+  }
+});
+
+function setAvatar(e: Event) {
+  const inputTarget = e.target as HTMLInputElement;
+  if (inputTarget?.files === null) return;
+
+  selectedAvatar.value = inputTarget.files[0];
+}
+
+async function onSubmit(value: Record<string, any>) {
+  try {
+    isLoading.value = true;
+
+    let formData = new FormData();
+
+    for (let key in value) {
+      formData.append(key, value[key]);
+    }
+
+    formData.append('file', selectedAvatar.value as Blob);
+
+    const response = await SessionApi.registration(formData);
+    const tokens = response.data;
+
+    sessionStore.setAccessToken(tokens.access);
+    sessionStore.setViewer(response.data);
+    await router.push({ name: 'home' });
+
+    toastr.success(
+      {
+        status: 'Регистрация',
+        text: 'Регистрация прошла успешно!'
+      },
+      3000
+    );
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const apiErrors = error.response?.data;
+      const errorText = apiErrors?.payload[0] ?? 'Что-то пошло не так!';
+      return toastr.error({ text: errorText });
+    }
+    return toastr.error({ text: 'Что-то пошло не так' });
+  } finally {
+    isLoading.value = false;
+  }
+}
 
 // TODO: Указывать сообщения об ошибке сверху поля
 const comparePassSchema = yup.object({
@@ -78,7 +140,6 @@ const comparePassSchema = yup.object({
   name: yup.string().required('Укажите ваш ник!')
 });
 
-const isLoading = ref(false);
 const inputsForm = ref({
   fileds: {
     email: {
@@ -99,34 +160,6 @@ const inputsForm = ref({
     }
   }
 });
-
-async function onSubmit(value: Record<string, any>) {
-  try {
-    isLoading.value = true;
-    const response = await SessionApi.registration(value);
-    const tokens = response.data;
-
-    sessionStore.setAccessToken(tokens.access);
-    sessionStore.setViewer(response.data);
-    await router.push({ name: 'home' });
-    toastr.success(
-      {
-        status: 'Регистрация',
-        text: 'Регистрация прошла успешно!'
-      },
-      3000
-    );
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const apiErrors = error.response?.data;
-      const errorText = apiErrors?.payload[0] ?? 'Что-то пошло не так!';
-      return toastr.error({ text: errorText });
-    }
-    return toastr.error({ text: 'Что-то пошло не так' });
-  } finally {
-    isLoading.value = false;
-  }
-}
 </script>
 <style lang="scss" scoped>
 .reg {
@@ -173,6 +206,16 @@ async function onSubmit(value: Record<string, any>) {
       display: flex;
       justify-content: center;
       align-items: center;
+      overflow: hidden;
+      img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .defaultAvatar {
+      width: auto;
+      height: auto;
     }
   }
   &__btn {
@@ -200,6 +243,15 @@ async function onSubmit(value: Record<string, any>) {
     color: #248bf2;
     text-transform: uppercase;
   }
+}
+.input-hidden {
+  opacity: 0;
+  margin: 0;
+  padding: 0;
+  height: 0;
+  width: 0;
+  line-height: 0;
+  overflow: hidden;
 }
 </style>
 shared/ui/toastrModel

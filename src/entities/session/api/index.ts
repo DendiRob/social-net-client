@@ -18,7 +18,7 @@ async function registration(data: Record<string, any>): Promise<AxiosResponse> {
   return await AuthApi.post('/auth/registration', data);
 }
 
-async function login(data: Record<string, any>): Promise<AxiosResponse> {
+async function login(data: FormData): Promise<AxiosResponse> {
   return await AuthApi.post('/auth/login', data);
 }
 

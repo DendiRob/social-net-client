@@ -9,20 +9,20 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to) => {
-  const viewerStore = SessionModel.useSessionStore();
+  const sessionStore = SessionModel.useSessionStore();
   const userStore = UserModel.useUserStore();
 
-  await viewerStore.getViewer();
+  await sessionStore.getViewer();
 
-  if (to.name === 'login' && !viewerStore.isAuth) return;
-  if (to.name === 'reg' && !viewerStore.isAuth) return;
+  if (to.name === 'login' && !sessionStore.isAuth) return;
+  if (to.name === 'reg' && !sessionStore.isAuth) return;
 
   userStore.userUrlHistory = to.fullPath;
 
-  if (to.name === 'login' && viewerStore.isAuth) return { name: 'home' };
-  if (to.name === 'reg' && viewerStore.isAuth) return { name: 'home' };
+  if (to.name === 'login' && sessionStore.isAuth) return { name: 'home' };
+  if (to.name === 'reg' && sessionStore.isAuth) return { name: 'home' };
 
-  if (viewerStore.isAuth) return;
+  if (sessionStore.isAuth) return;
 
   return { name: 'login' };
 });
