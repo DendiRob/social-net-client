@@ -14,6 +14,12 @@
             alt="avatar"
             :class="{ defaultAvatar: !selectedAvatar }"
           />
+          <div
+            @click.stop="deleteAvatar"
+            :class="['deleteAvatar', { showDeleteAvatar: selectedAvatar }]"
+          >
+            <SvgIcon name="close" />
+          </div>
           <input
             class="input-hidden"
             type="file"
@@ -70,7 +76,7 @@ const sessionStore = SessionModel.useSessionStore();
 const toastr = useToastr();
 
 const isLoading = ref(false);
-const imageInput = ref<HTMLInputElement>();
+const imageInput = ref<any>();
 const selectedAvatar = ref<unknown>(null);
 
 const avatarUrl = computed(() => {
@@ -86,6 +92,14 @@ function setAvatar(e: Event) {
   if (inputTarget?.files === null) return;
 
   selectedAvatar.value = inputTarget.files[0];
+}
+
+function deleteAvatar() {
+  if (imageInput.value === undefined) return;
+  const list = new DataTransfer();
+
+  imageInput.value.files = list.files;
+  selectedAvatar.value = null;
 }
 
 async function onSubmit(value: Record<string, any>) {
@@ -207,15 +221,35 @@ const inputsForm = ref({
       justify-content: center;
       align-items: center;
       overflow: hidden;
+      position: relative;
       img {
         object-fit: cover;
         width: 100%;
         height: 100%;
       }
-    }
-    .defaultAvatar {
-      width: auto;
-      height: auto;
+      &:hover {
+        .showDeleteAvatar {
+          display: flex;
+        }
+      }
+      .defaultAvatar {
+        width: auto;
+        height: auto;
+      }
+      .deleteAvatar {
+        width: 100%;
+        height: 100%;
+        background-color: rgba(199, 0, 0, 0.5);
+        position: absolute;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        svg {
+          color: #f2f3f5;
+          width: 40px;
+          height: 40px;
+        }
+      }
     }
   }
   &__btn {
