@@ -112,7 +112,7 @@ async function onSubmit(value: Record<string, any>) {
       formData.append(key, value[key]);
     }
 
-    formData.append('file', selectedAvatar.value as Blob);
+    formData.append('avatar', selectedAvatar.value as Blob);
 
     const response = await SessionApi.registration(formData);
     const tokens = response.data;
