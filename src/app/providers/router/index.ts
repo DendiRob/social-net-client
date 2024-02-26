@@ -12,10 +12,10 @@ router.beforeEach(async (to) => {
   const sessionStore = SessionModel.useSessionStore();
   const userStore = UserModel.useUserStore();
 
-  await sessionStore.getViewer();
-
   if (to.name === 'login' && !sessionStore.isAuth) return;
   if (to.name === 'reg' && !sessionStore.isAuth) return;
+
+  await sessionStore.getViewer();
 
   userStore.userUrlHistory = to.fullPath;
 

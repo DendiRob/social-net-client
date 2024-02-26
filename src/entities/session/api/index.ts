@@ -25,6 +25,7 @@ async function login(data: FormData): Promise<AxiosResponse> {
 async function logout() {
   return await api_service.post('/auth/logout');
 }
+
 async function getViewer() {
   return await api_service.get('/users/viewer');
 }
