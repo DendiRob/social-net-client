@@ -18,7 +18,7 @@ import { onMounted, ref } from 'vue';
 import { isAxiosError } from 'axios';
 import { useRouter } from 'vue-router';
 
-import ProfileSidePanel from 'entities/profile/ui';
+import ProfileSidePanel from 'entities/profile/ui/ProfileSidePanel';
 import { useSessionStore } from 'entities/session/model';
 import { profileModel } from 'entities/profile';
 import { sidebar_profile_types } from 'entities/profile/profile.types';
@@ -62,3 +62,4 @@ onMounted(async () => {
   height: 100%;
 }
 </style>
+entities/profile/ui/ProfileSidePanel

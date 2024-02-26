@@ -8,27 +8,10 @@
     >
       <div class="reg__title">New account</div>
       <div class="reg__inputs">
-        <div class="reg__input reg__input_img" @click="imageInput?.click">
-          <img
-            :src="avatarUrl"
-            alt="avatar"
-            :class="{ defaultAvatar: !selectedAvatar }"
-          />
-          <div
-            @click.stop="deleteAvatar"
-            :class="['deleteAvatar', { showDeleteAvatar: selectedAvatar }]"
-          >
-            <SvgIcon name="close" />
-          </div>
-          <input
-            class="input-hidden"
-            type="file"
-            accept=".png,.jpg,.jpeg"
-            ref="imageInput"
-            alt="set avatar"
-            @change="setAvatar"
-          />
-        </div>
+        <AvatarInput
+          v-model="selectedAvatar"
+          class="reg__input reg__input_img"
+        />
         <InputText
           @keydown.space.prevent
           class="reg__input"
@@ -58,49 +41,25 @@
   <ToastrModal />
 </template>
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { Form } from 'vee-validate';
 import * as yup from 'yup';
 
+import AvatarInput from 'entities/profile/ui/avatarInput';
+import { SessionModel, SessionApi } from 'entities/session';
 import InputPassword from 'shared/ui/InputPassword';
 import ToastrModal from 'shared/ui/toastrModel';
 import InputText from 'shared/ui/InputText';
-import addPhoto from 'shared/ui/assets/add-photo.svg';
 import useToastr from 'shared/lib/useToastr';
-import { SessionModel, SessionApi } from 'entities/session';
 
 const router = useRouter();
 const sessionStore = SessionModel.useSessionStore();
 const toastr = useToastr();
 
 const isLoading = ref(false);
-const imageInput = ref<any>();
-const selectedAvatar = ref<unknown>(null);
-
-const avatarUrl = computed(() => {
-  if (selectedAvatar.value === null) {
-    return addPhoto;
-  } else {
-    return URL.createObjectURL(selectedAvatar.value as Blob | MediaSource);
-  }
-});
-
-function setAvatar(e: Event) {
-  const inputTarget = e.target as HTMLInputElement;
-  if (inputTarget?.files === null) return;
-
-  selectedAvatar.value = inputTarget.files[0];
-}
-
-function deleteAvatar() {
-  if (imageInput.value === undefined) return;
-  const list = new DataTransfer();
-
-  imageInput.value.files = list.files;
-  selectedAvatar.value = null;
-}
+const selectedAvatar = ref<any>(null);
 
 async function onSubmit(value: Record<string, any>) {
   try {
@@ -112,7 +71,7 @@ async function onSubmit(value: Record<string, any>) {
       formData.append(key, value[key]);
     }
 
-    formData.append('avatar', selectedAvatar.value as Blob);
+    formData.append('avatar', selectedAvatar.value);
 
     const response = await SessionApi.registration(formData);
     const tokens = response.data;
@@ -211,45 +170,8 @@ const inputsForm = ref({
       border: 1px solid #ff0000;
     }
     &_img {
-      margin: 0 auto;
-      cursor: pointer;
       width: 96px;
       height: 96px;
-      background-color: #f2f3f5;
-      border-radius: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-      position: relative;
-      img {
-        object-fit: cover;
-        width: 100%;
-        height: 100%;
-      }
-      &:hover {
-        .showDeleteAvatar {
-          display: flex;
-        }
-      }
-      .defaultAvatar {
-        width: auto;
-        height: auto;
-      }
-      .deleteAvatar {
-        width: 100%;
-        height: 100%;
-        background-color: rgba(199, 0, 0, 0.5);
-        position: absolute;
-        display: none;
-        justify-content: center;
-        align-items: center;
-        svg {
-          color: #f2f3f5;
-          width: 40px;
-          height: 40px;
-        }
-      }
     }
   }
   &__btn {
@@ -278,14 +200,6 @@ const inputsForm = ref({
     text-transform: uppercase;
   }
 }
-.input-hidden {
-  opacity: 0;
-  margin: 0;
-  padding: 0;
-  height: 0;
-  width: 0;
-  line-height: 0;
-  overflow: hidden;
-}
 </style>
-shared/ui/toastrModel
+shared/ui/toastrModel entities/profile/ui/avatarInput
+entities/profile/ui/avatarInput
