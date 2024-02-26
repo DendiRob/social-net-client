@@ -1,9 +1,7 @@
+import { router } from 'app/providers';
 import axios from 'axios';
 import { accessTokenName } from 'shared/config';
 import { setAccessToken } from 'shared/lib/jwt';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
 
 export function createAxiosInstance() {
   const instance = axios.create({
@@ -20,6 +18,7 @@ api_service.interceptors.request.use((config) => {
   return config;
 });
 
+// TODO: не правильно с точки зрения FCD импортировать сверху роутер,переделать!
 api_service.interceptors.response.use(
   (response) => response,
   async (error) => {
