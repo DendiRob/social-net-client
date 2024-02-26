@@ -35,9 +35,12 @@ export const useSessionStore = defineStore(namespaced, () => {
   async function getViewer() {
     try {
       const res = await SessionApi.getViewer();
+
       setViewer(res.data);
     } catch (error) {
-      console.log(error); // TODO: error handler
+      if (isAxiosError(error)) {
+        throw new AxiosError();
+      }
     }
   }
 

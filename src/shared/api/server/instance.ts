@@ -14,7 +14,7 @@ export function createAxiosInstance() {
   return instance;
 }
 
-export const api_service = createAxiosInstance(); // вот на это api нужно накинуть интерсепторы, которые будут проверять аутентификацию
+export const api_service = createAxiosInstance();
 api_service.interceptors.request.use((config) => {
   config.headers['access-token'] = localStorage.getItem(accessTokenName);
   return config;
@@ -23,13 +23,15 @@ api_service.interceptors.request.use((config) => {
 api_service.interceptors.response.use(
   (response) => response,
   async (error) => {
+    const instance = createAxiosInstance();
     if (error.response.status === 401) {
-      const ok = await api_service.post('/auth/refresh');
-      setAccessToken(ok.data.access);
+      try {
+        const ok = await instance.post('/auth/refresh');
 
-      if (ok) {
+        setAccessToken(ok.data.access);
+
         return await api_service(error.config);
-      } else {
+      } catch (error) {
         router.push({ name: 'login' });
       }
     }
