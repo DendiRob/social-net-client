@@ -1,9 +1,16 @@
 <template>
   <div class="profile-wrapper">
     <div class="profile__title">Редактирование профиля</div>
+    <SetAvatar class="profile__avatar" />
+    <div class="profile__subtitle">Информция</div>
+    <EditProfileForm />
   </div>
 </template>
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { SetAvatar, EditProfileForm } from 'features/profileEditing';
+
+// TODO: запрос делаем на сервер за фоткой
+</script>
 <style scoped lang="scss">
 .profile {
   &-wrapper {
@@ -15,6 +22,16 @@
     font-size: 1.714rem;
     font-weight: 700;
     margin-bottom: 20px;
+  }
+  &__avatar {
+    margin: 0 auto;
+    margin-bottom: 20px;
+  }
+  &__subtitle {
+    font-weight: 700;
+    font-size: 1.214rem;
+    color: #171a1f;
+    margin-bottom: 12px;
   }
 }
 </style>

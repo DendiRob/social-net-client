@@ -62,7 +62,7 @@ const inputsForm = ref({
 async function onSubmit(values: Record<string, any>) {
   try {
     isLoading.value = true;
-    const response = await SessionApi.login(values);
+    const response = await SessionApi.login(values as FormData);
     const tokens = response.data;
 
     sessionStore.setAccessToken(tokens.access);

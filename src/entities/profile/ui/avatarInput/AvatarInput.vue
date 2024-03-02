@@ -26,7 +26,7 @@ import { computed, ref } from 'vue';
 
 import addPhoto from 'shared/ui/assets/add-photo.svg';
 
-const emits = defineEmits(['update:modelValue']);
+const emits = defineEmits(['update:modelValue', 'delete']);
 const props = defineProps({
   modelValue: {
     default: null
@@ -55,6 +55,7 @@ function deleteAvatar() {
   const list = new DataTransfer();
 
   imageInput.value.files = list.files;
+  emits('delete');
   emits('update:modelValue', null);
 }
 </script>

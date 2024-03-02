@@ -12,6 +12,7 @@
       :type="inputType"
       class="inputText__input"
       autocomplete="on"
+      :maxlength="maxLength"
     />
   </div>
 </template>
@@ -20,10 +21,13 @@ import { toRaw } from 'vue';
 import { useField } from 'vee-validate';
 const emit = defineEmits(['update:modelValue', 'input']);
 const props = defineProps({
-  modelValue: String,
+  modelValue: {
+    type: String,
+    default: () => ''
+  },
   placeholder: {
     type: String,
-    default: ''
+    default: () => ''
   },
   inputType: {
     type: String,
@@ -35,11 +39,20 @@ const props = defineProps({
   },
   name: {
     type: String,
-    default: ''
+    default: () => ' '
+  },
+  options: {
+    type: Object,
+    default: () => ({})
+  },
+  maxLength: {
+    type: Number,
+    default: null
   }
 });
 const { value, errorMessage, validate } = useField(props.name, props.rules, {
-  initialValue: toRaw(props.modelValue)
+  initialValue: toRaw(props.modelValue),
+  ...props.options
 });
 
 defineExpose({ validate });
