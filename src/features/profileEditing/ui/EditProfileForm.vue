@@ -1,17 +1,48 @@
 <template>
-  <Form @submit="onSubmit" :validation-schema="validateEditProfileForm">
-    <InputText @keydown.space.prevent v-bind="inputsForm.fileds.firstName" />
-    <InputText @keydown.space.prevent v-bind="inputsForm.fileds.secondName" />
-    <InputText @keydown.space.prevent v-bind="inputsForm.fileds.userStatus" />
-    <InputText @keydown.space.prevent v-bind="inputsForm.fileds.userLocation" />
+  <Form
+    class="profile__form"
+    @submit="onSubmit"
+    :validation-schema="validateEditProfileForm"
+  >
+    <InputText
+      class="profile__input"
+      @keydown.space.prevent
+      v-bind="inputsForm.fileds.firstName"
+    />
+    <InputText
+      class="profile__input"
+      @keydown.space.prevent
+      v-bind="inputsForm.fileds.secondName"
+    />
+    <InputText
+      class="profile__input"
+      @keydown.space.prevent
+      v-bind="inputsForm.fileds.userStatus"
+    />
+    <InputText
+      class="profile__input"
+      @keydown.space.prevent
+      v-bind="inputsForm.fileds.userLocation"
+    />
+    <CustomTextarea
+      class="profile__aboutMe"
+      :placeholder="'Обо мне'"
+      v-model="aboutMe"
+      :maxLength="430"
+    />
   </Form>
 </template>
 <script setup lang="ts">
 import { Form } from 'vee-validate';
 import { ref } from 'vue';
+
+import CustomTextarea from 'shared/ui/customTextarea';
 import { validateEditProfileForm } from '../model/profileEditing.schemas.';
 
-async function onSubmit(value: Record<string, any>) {}
+async function onSubmit(value: Record<string, any>) {
+  // TODO: запрос на изменение данных
+  console.log(value);
+}
 
 const inputsForm = ref({
   fileds: {
@@ -37,6 +68,17 @@ const inputsForm = ref({
     }
   }
 });
+
+const aboutMe = ref('');
 </script>
-<style scoped lang="scss"></style>
-../model/profileEditing.schemas.
+<style scoped lang="scss">
+.profile {
+  &__input {
+    margin-bottom: 1.142rem;
+  }
+  &__aboutMe {
+    height: 200px;
+    margin-bottom: 28px;
+  }
+}
+</style>
