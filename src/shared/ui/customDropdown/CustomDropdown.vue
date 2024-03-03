@@ -1,5 +1,101 @@
 <template>
-  <div>[eq]</div>
+  <div class="dropdown">
+    <input
+      readonly
+      :value="modelValue"
+      :placeholder="placeholder"
+      class="item item__selected"
+      @click.stop="openList"
+    />
+    <div
+      v-if="isActive"
+      class="item__list"
+      :style="{ maxHeight: maxHeight + 'px' }"
+    >
+      <div @click="updateValue('asdadsasd')" class="item">asdasdas</div>
+      <div @click="updateValue('asdadsasd')" class="item">asdasdas</div>
+      <div @click="updateValue('asdadsasd')" class="item">asdasdas</div>
+      <div @click="updateValue('asdadsasd')" class="item">asdasdas</div>
+    </div>
+  </div>
 </template>
-<script setup lang="ts"></script>
-<style scoped lang="scss"></style>
+<script setup lang="ts">
+import { onBeforeUnmount, onMounted, ref } from 'vue';
+
+const emit = defineEmits(['update:modelValue']);
+defineProps({
+  modelValue: {
+    type: String,
+    default: () => ''
+  },
+  placeholder: {
+    type: String,
+    default: () => ''
+  },
+  maxHeight: {
+    type: Number
+  }
+});
+
+const isActive = ref(false);
+const closeList = () => {
+  isActive.value = false;
+};
+
+const openList = () => {
+  isActive.value = true;
+};
+
+const updateValue = (value: string) => {
+  closeList();
+  emit('update:modelValue', value);
+};
+
+onMounted(() => {
+  window.addEventListener('click', closeList);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('click', closeList);
+});
+</script>
+<style scoped lang="scss">
+.dropdown {
+  width: auto;
+  color: #171a1f;
+  position: relative;
+  .item {
+    padding: 0.571rem 1.142rem;
+    background: #fff;
+    width: 100%;
+    font-weight: 400;
+    font-size: 1.071rem;
+    cursor: pointer;
+    &:hover {
+      background: rgba(201, 204, 209, 0.24);
+    }
+    &__list {
+      padding: 0.571rem 0;
+      top: calc(100% + 0.571rem);
+      background: #fff;
+      box-shadow:
+        0 0 48px 0 rgba(0, 0, 0, 0.04),
+        0 8px 24px 0 rgba(0, 0, 0, 0.08);
+      border-radius: 0.571rem;
+      overflow: hidden;
+      position: absolute;
+      width: 100%;
+      z-index: 100;
+      overflow-y: auto;
+    }
+    &__selected {
+      width: 100%;
+      border-radius: 0.571rem;
+      outline: none;
+      border: none;
+      background: rgba(201, 204, 209, 0.24);
+      padding: 1.142rem;
+    }
+  }
+}
+</style>

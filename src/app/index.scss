@@ -9,6 +9,15 @@
   box-sizing: inherit;
   font-family: 'Open Sans', sans-serif;
 }
+* {
+  ::-webkit-scrollbar {
+    width: 7px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background-color: rgba(201, 204, 209);
+    border-radius: 0.517rem;
+  }
+}
 
 body {
   margin: 0;

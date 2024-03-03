@@ -40,9 +40,7 @@
     />
     <div class="profile__subtitle">День рождения</div>
     <div class="profile__birthday">
-      <CustomDropdown />
-      <CustomDropdown />
-      <CustomDropdown />
+      <CustomDropdown :max-height="200" placeholder="День" v-model="day" />
     </div>
     <CustomBtn type="submit" size="large">Сохранить изменения</CustomBtn>
   </Form>
@@ -92,6 +90,9 @@ const inputsForm = ref({
 });
 
 const aboutMe = ref('');
+const day = ref();
+const month = ref();
+const year = ref();
 </script>
 <style scoped lang="scss">
 .profile {
