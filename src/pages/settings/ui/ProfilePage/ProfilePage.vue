@@ -2,7 +2,6 @@
   <div class="profile-wrapper">
     <div class="profile__title">Редактирование профиля</div>
     <SetAvatar class="profile__avatar" />
-    <div class="profile__subtitle">Информция</div>
     <EditProfileForm />
   </div>
 </template>
@@ -26,12 +25,6 @@ import { SetAvatar, EditProfileForm } from 'features/profileEditing';
   &__avatar {
     margin: 0 auto;
     margin-bottom: 20px;
-  }
-  &__subtitle {
-    font-weight: 700;
-    font-size: 1.214rem;
-    color: #171a1f;
-    margin-bottom: 12px;
   }
 }
 </style>

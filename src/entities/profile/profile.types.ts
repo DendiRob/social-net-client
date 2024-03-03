@@ -10,7 +10,7 @@ export interface IUserProfile {
 export const sidebar_profile_types = {
   editProfile: {
     icon: 'editProfile',
-    label: 'Edit profile',
+    label: 'Редактировать профиль',
     routeName: 'profile-editing'
   },
   communities: {

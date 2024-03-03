@@ -20,6 +20,7 @@ main {
   height: 100vh;
   flex: 1;
   padding: 60px 90px 0 90px;
+  overflow-y: auto;
 }
 .defaultLayout {
   display: flex;

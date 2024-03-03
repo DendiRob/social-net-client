@@ -24,5 +24,6 @@ export const validateEditProfileForm = yup.object({
     .string()
     .notRequired()
     .nullable()
-    .transform((value) => (value ? value : null))
+    .transform((value) => (value ? value : null)),
+  username: yup.string().required('Это поле не может быть пустым')
 });

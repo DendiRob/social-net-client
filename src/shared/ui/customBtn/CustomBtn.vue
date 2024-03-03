@@ -1,5 +1,5 @@
 <template>
-  <button :class="`btn ${size}-size ${btnStyle}`">
+  <button :type="typeBtn" :class="`btn ${size}-size ${btnStyle}`">
     <span :class="{ hideText: isLoading }">
       <slot></slot>
     </span>
@@ -9,6 +9,7 @@
   </button>
 </template>
 <script setup lang="ts">
+import type { PropType, ButtonHTMLAttributes } from 'vue';
 defineProps({
   size: {
     type: String,
@@ -25,6 +26,10 @@ defineProps({
   isLoading: {
     type: Boolean,
     default: false
+  },
+  typeBtn: {
+    type: String as PropType<ButtonHTMLAttributes['type']>,
+    default: 'button'
   }
 });
 </script>

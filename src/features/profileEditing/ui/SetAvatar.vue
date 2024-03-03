@@ -27,8 +27,8 @@ onMounted(() => {
 <style scoped lang="scss">
 .avatar {
   &-wrapper {
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
   }
 }
 </style>
