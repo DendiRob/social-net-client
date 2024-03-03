@@ -1,12 +1,14 @@
 <template>
   <div class="dropdown">
-    <input
-      readonly
-      :value="modelValue"
-      :placeholder="placeholder"
-      class="item item__selected"
-      @click.stop="openList"
-    />
+    <div @click.stop="switcher">
+      <input
+        readonly
+        :value="modelValue"
+        :placeholder="placeholder"
+        class="item item__selected"
+      />
+      <SvgIcon :class="['arrow', { active: isActive }]" name="arrow-dropdown" />
+    </div>
     <div
       v-if="isActive"
       class="item__list"
@@ -42,8 +44,8 @@ const closeList = () => {
   isActive.value = false;
 };
 
-const openList = () => {
-  isActive.value = true;
+const switcher = () => {
+  isActive.value = !isActive.value;
 };
 
 const updateValue = (value: string) => {
@@ -96,6 +98,18 @@ onBeforeUnmount(() => {
       background: rgba(201, 204, 209, 0.24);
       padding: 1.142rem;
     }
+  }
+  .arrow {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    right: 16px;
+    top: 50%;
+    cursor: pointer;
+    transform: translateY(-50%) rotate(180deg);
+  }
+  .active {
+    transform: translateY(-50%);
   }
 }
 </style>
