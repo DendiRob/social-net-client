@@ -1,16 +1,16 @@
 <template>
   <div
     :class="[
-      'inputText-wrapper',
-      { 'inputText-wrapper-warning': errorMessage?.length }
+      'inputNumber-wrapper',
+      { 'inputNumber-wrapper-warning': errorMessage?.length }
     ]"
   >
     <input
-      @input="updateValue"
+      @input="updateValue($event)"
       v-model="value"
       :placeholder="placeholder"
-      :type="inputType"
-      class="inputText__input"
+      type="number"
+      class="inputNumber__input"
       autocomplete="on"
       :maxlength="maxLength"
     />
@@ -20,7 +20,6 @@
 import { toRaw } from 'vue';
 import { useField } from 'vee-validate';
 
-const emit = defineEmits(['update:modelValue', 'input']);
 const props = defineProps({
   modelValue: {
     type: String,
@@ -29,10 +28,6 @@ const props = defineProps({
   placeholder: {
     type: String,
     default: () => ''
-  },
-  inputType: {
-    type: String,
-    default: () => 'text'
   },
   rules: {
     type: Object,
@@ -58,14 +53,19 @@ const { value, errorMessage, validate } = useField(props.name, props.rules, {
 
 defineExpose({ validate });
 
-const updateValue = () => {
-  const val = toRaw(value);
-  emit('input', val);
-  emit('update:modelValue', val);
+const updateValue = (e: Event) => {
+  if (
+    props.maxLength !== null &&
+    String(value.value).length === props.maxLength
+  ) {
+    return;
+  }
+
+  value.value = (e.target as HTMLInputElement).value;
 };
 </script>
 <style scoped lang="scss">
-.inputText {
+.inputNumber {
   width: 100%;
   margin-top: 12px;
   &-wrapper {

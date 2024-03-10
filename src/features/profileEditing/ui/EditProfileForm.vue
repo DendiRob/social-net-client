@@ -40,7 +40,23 @@
     />
     <div class="profile__subtitle">День рождения</div>
     <div class="profile__birthday">
-      <CustomDropdown :max-height="200" placeholder="День" v-model="day" />
+      <CustomDropdown
+        class="days"
+        :max-height="200"
+        placeholder="День"
+        v-model="day"
+      />
+      <CustomDropdown
+        class="months"
+        :max-height="200"
+        placeholder="Месяц"
+        v-model="month"
+      />
+      <InputNumber
+        class="years"
+        @keydown.space.prevent
+        v-bind="inputsForm.fileds.years"
+      />
     </div>
     <CustomBtn type="submit" size="large">Сохранить изменения</CustomBtn>
   </Form>
@@ -85,6 +101,11 @@ const inputsForm = ref({
       name: 'username',
       placeholder: 'Введите имя пользователя ',
       maxLength: 30
+    },
+    years: {
+      name: 'years',
+      placeholder: 'Год',
+      maxLength: 4
     }
   }
 });
@@ -92,7 +113,6 @@ const inputsForm = ref({
 const aboutMe = ref('');
 const day = ref();
 const month = ref();
-const year = ref();
 </script>
 <style scoped lang="scss">
 .profile {
@@ -111,6 +131,15 @@ const year = ref();
   }
   &__birthday {
     margin-bottom: 32px;
+    display: flex;
+    justify-content: space-between;
+    .days {
+      min-width: 100px;
+    }
+    .months {
+      margin: 0 16px;
+      min-width: 190px;
+    }
   }
 }
 </style>
