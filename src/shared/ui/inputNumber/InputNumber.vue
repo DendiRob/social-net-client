@@ -6,7 +6,6 @@
     ]"
   >
     <input
-      @input="updateValue($event)"
       v-model="value"
       :placeholder="placeholder"
       type="number"
@@ -17,7 +16,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { toRaw } from 'vue';
+import { toRaw, watch } from 'vue';
 import { useField } from 'vee-validate';
 
 const props = defineProps({
@@ -53,16 +52,11 @@ const { value, errorMessage, validate } = useField(props.name, props.rules, {
 
 defineExpose({ validate });
 
-const updateValue = (e: Event) => {
-  if (
-    props.maxLength !== null &&
-    String(value.value).length === props.maxLength
-  ) {
-    return;
+watch(value as any, () => {
+  if (String(value.value).length > props.maxLength) {
+    value.value = String(value.value).slice(0, -1);
   }
-
-  value.value = (e.target as HTMLInputElement).value;
-};
+});
 </script>
 <style scoped lang="scss">
 .inputNumber {
@@ -73,6 +67,11 @@ const updateValue = (e: Event) => {
     overflow: hidden;
     border-radius: 8px;
     position: relative;
+    input[type='number']::-webkit-outer-spin-button,
+    input[type='number']::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
     &-warning {
       border: 1px solid #ff0000;
     }
