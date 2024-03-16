@@ -42,7 +42,6 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { Form } from 'vee-validate';
 import * as yup from 'yup';
@@ -53,6 +52,7 @@ import InputPassword from 'shared/ui/InputPassword';
 import ToastrModal from 'shared/ui/toastrModel';
 import InputText from 'shared/ui/InputText';
 import useToastr from 'shared/lib/useToastr';
+import { isAxiosError } from 'shared/utils';
 
 const router = useRouter();
 const sessionStore = SessionModel.useSessionStore();
@@ -88,11 +88,7 @@ async function onSubmit(value: Record<string, any>) {
       3000
     );
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const apiErrors = error.response?.data;
-      const errorText = apiErrors?.payload[0] ?? 'Что-то пошло не так!';
-      return toastr.error({ text: errorText });
-    }
+    if (isAxiosError(error)) return;
     return toastr.error({ text: 'Что-то пошло не так' });
   } finally {
     isLoading.value = false;

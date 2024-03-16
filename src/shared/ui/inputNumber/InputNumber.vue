@@ -52,7 +52,7 @@ const { value, errorMessage, validate } = useField(props.name, props.rules, {
 
 defineExpose({ validate });
 
-watch(value as any, () => {
+watch(value, () => {
   if (String(value.value).length > props.maxLength) {
     value.value = String(value.value).slice(0, -1);
   }
