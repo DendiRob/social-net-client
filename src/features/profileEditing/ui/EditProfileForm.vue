@@ -27,9 +27,8 @@
     />
     <CustomTextarea
       class="profile__aboutMe"
-      :placeholder="'Обо мне'"
-      v-model="aboutMe"
-      :maxLength="430"
+      v-bind="inputsForm.fileds.aboutMe"
+      v-model="inputsForm.fileds.aboutMe.value"
     />
     <div class="profile__subtitle">Имя пользователя</div>
     <InputText
@@ -42,20 +41,21 @@
     <div class="profile__birthday">
       <CustomDropdown
         class="days"
-        :max-height="200"
-        placeholder="День"
-        v-model="day"
+        v-bind="inputsForm.fileds.days"
+        v-model="inputsForm.fileds.days.value"
+        :disabled="inputsForm.fileds.month.value === '' || isYearFilled"
       />
       <CustomDropdown
         class="months"
-        :max-height="200"
-        placeholder="Месяц"
-        v-model="month"
+        v-bind="inputsForm.fileds.month"
+        v-model="inputsForm.fileds.month.value"
+        :disabled="isYearFilled"
       />
       <InputNumber
         class="years"
         @keydown.space.prevent
         v-bind="inputsForm.fileds.years"
+        v-model="inputsForm.fileds.years.value"
       />
     </div>
     <CustomBtn type="submit" size="large">Сохранить изменения</CustomBtn>
@@ -63,7 +63,7 @@
 </template>
 <script setup lang="ts">
 import { Form } from 'vee-validate';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import CustomTextarea from 'shared/ui/customTextarea';
 import CustomDropdown from 'shared/ui/customDropdown';
@@ -72,6 +72,7 @@ import { validateEditProfileForm } from '../model/profileEditing.schemas.';
 
 async function onSubmit(value: Record<string, any>) {
   // TODO: запрос на изменение данных
+
   console.log(value);
 }
 
@@ -103,16 +104,37 @@ const inputsForm = ref({
       maxLength: 30
     },
     years: {
+      value: undefined,
       name: 'years',
       placeholder: 'Год',
       maxLength: 4
+    },
+    aboutMe: {
+      value: '',
+      placeholder: 'Обо мне',
+      maxLength: 430
+    },
+    days: {
+      value: '',
+      placeholder: 'День',
+      maxHeight: 200
+    },
+    month: {
+      value: '',
+      placeholder: 'Месяц',
+      maxHeight: 200
     }
   }
 });
 
-const aboutMe = ref('');
-const day = ref();
-const month = ref();
+const isYearFilled = computed(() => {
+  // console.log(inputsForm.value.fileds.years.value);
+  return (
+    inputsForm.value.fileds.years.value === undefined ||
+    String(inputsForm.value.fileds.years.value).length <
+      inputsForm.value.fileds.years.maxLength
+  );
+});
 </script>
 <style scoped lang="scss">
 .profile {

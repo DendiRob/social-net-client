@@ -1,11 +1,13 @@
 <template>
   <div class="dropdown">
-    <div @click.stop="switcher">
+    <div @click.stop="switcher" :class="[{ disabled }]">
+      <div v-if="disabled" class="disabled__cover"></div>
       <input
         readonly
         :value="modelValue"
         :placeholder="placeholder"
         class="item item__selected"
+        :disabled="disabled"
       />
       <SvgIcon :class="['arrow', { active: isActive }]" name="arrow-dropdown" />
     </div>
@@ -25,7 +27,7 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 
 const emit = defineEmits(['update:modelValue']);
-defineProps({
+const props = defineProps({
   modelValue: {
     type: String,
     default: () => ''
@@ -36,6 +38,10 @@ defineProps({
   },
   maxHeight: {
     type: Number
+  },
+  disabled: {
+    type: Boolean,
+    default: false
   }
 });
 
@@ -45,6 +51,7 @@ const closeList = () => {
 };
 
 const switcher = () => {
+  if (props.disabled) return;
   isActive.value = !isActive.value;
 };
 
@@ -110,6 +117,20 @@ onBeforeUnmount(() => {
   }
   .active {
     transform: translateY(-50%);
+  }
+}
+.disabled {
+  &__cover {
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    z-index: 2;
+    position: absolute;
+    opacity: 0.5;
+  }
+  .arrow,
+  input {
+    color: #b5b5b5;
   }
 }
 </style>

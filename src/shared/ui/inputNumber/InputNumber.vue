@@ -12,6 +12,7 @@
       class="inputNumber__input"
       autocomplete="on"
       :maxlength="maxLength"
+      @input="onInput"
     />
   </div>
 </template>
@@ -21,8 +22,8 @@ import { useField } from 'vee-validate';
 
 const props = defineProps({
   modelValue: {
-    type: String,
-    default: () => ''
+    type: Number,
+    default: () => null
   },
   placeholder: {
     type: String,
@@ -49,14 +50,21 @@ const { value, errorMessage, validate } = useField(props.name, props.rules, {
   initialValue: toRaw(props.modelValue),
   ...props.options
 });
-
+const emits = defineEmits(['input', 'update:modelValue']);
 defineExpose({ validate });
 
 watch(value, () => {
   if (String(value.value).length > props.maxLength) {
-    value.value = String(value.value).slice(0, -1);
+    value.value = +String(value.value).slice(0, -1);
   }
 });
+
+function onInput() {
+  const { value: rawValue } = toRaw(value);
+
+  emits('input', +rawValue);
+  emits('update:modelValue', +rawValue);
+}
 </script>
 <style scoped lang="scss">
 .inputNumber {
