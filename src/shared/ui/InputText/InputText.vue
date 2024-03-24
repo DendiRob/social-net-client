@@ -5,12 +5,14 @@
       { 'inputText-wrapper-warning': errorMessage?.length }
     ]"
   >
+    <div class="errorMessage">{{ errorMessage }}</div>
     <input
       @input="updateValue"
       v-model="value"
       :placeholder="placeholder"
       :type="inputType"
       class="inputText__input"
+      :class="{ 'inputText__input-warning': errorMessage?.length }"
       autocomplete="on"
       :maxlength="maxLength"
     />
@@ -70,12 +72,8 @@ const updateValue = () => {
   margin-top: 12px;
   &-wrapper {
     width: 100%;
-    overflow: hidden;
     border-radius: 8px;
     position: relative;
-    &-warning {
-      border: 1px solid #ff0000;
-    }
   }
   &__input {
     box-sizing: border-box;
@@ -87,6 +85,18 @@ const updateValue = () => {
     padding: 16px;
     border: none;
     outline: none;
+    border-radius: 8px;
+    &-warning {
+      border: 1px solid #ff0000;
+    }
   }
+}
+.errorMessage {
+  position: absolute;
+  bottom: calc(100% + 1px);
+  max-width: 100%;
+  color: #ff0000;
+  font-weight: 500;
+  z-index: 100;
 }
 </style>

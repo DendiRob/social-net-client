@@ -43,12 +43,14 @@
         class="days"
         v-bind="inputsForm.fileds.days"
         v-model="inputsForm.fileds.days.value"
-        :disabled="inputsForm.fileds.month.value === '' || !isYearFilled"
+        :options="daysByMonth"
+        :disabled="inputsForm.fileds.months.value === '' || !isYearFilled"
       />
       <CustomDropdown
         class="months"
-        v-bind="inputsForm.fileds.month"
-        v-model="inputsForm.fileds.month.value"
+        v-bind="inputsForm.fileds.months"
+        v-model="inputsForm.fileds.months.value"
+        :options="monthsOfYear"
         :disabled="!isYearFilled"
       />
       <InputNumber
@@ -68,13 +70,8 @@ import { computed, ref } from 'vue';
 import CustomTextarea from 'shared/ui/customTextarea';
 import CustomDropdown from 'shared/ui/customDropdown';
 
-import { validateEditProfileForm } from '../model/profileEditing.schemas.';
-
-async function onSubmit(value: Record<string, any>) {
-  // TODO: запрос на изменение данных
-
-  console.log(value);
-}
+import { validateEditProfileForm } from '../model/profileEditing.schemas';
+import { monthsOfYear } from '../model/consts';
 
 const inputsForm = ref({
   fileds: {
@@ -119,13 +116,37 @@ const inputsForm = ref({
       placeholder: 'День',
       maxHeight: 200
     },
-    month: {
+    months: {
       value: '',
       placeholder: 'Месяц',
       maxHeight: 200
     }
   }
 });
+
+function getDaysInMonth(year: number, month: number) {
+  const lastDayOfMonth = new Date(year, month + 1, 0);
+  return lastDayOfMonth.getDate();
+}
+
+const daysByMonth = computed(() => {
+  const month = monthsOfYear.findIndex(
+    (month) => month === inputsForm.value.fileds.months.value
+  );
+  if (inputsForm.value.fileds.years.value === undefined) return [];
+  const years = +inputsForm.value.fileds.years.value;
+
+  const finishDay = getDaysInMonth(years, month);
+
+  const days = Array.from({ length: finishDay }, (_, index) => index + 1);
+  return days;
+});
+
+async function onSubmit(value: Record<string, any>) {
+  // TODO: запрос на изменение данных
+
+  console.log(value);
+}
 
 const isYearFilled = computed(() => {
   const isFilled =
@@ -164,3 +185,4 @@ const isYearFilled = computed(() => {
   }
 }
 </style>
+../model/profileEditing.schemas

@@ -5,11 +5,13 @@
       { 'inputNumber-wrapper-warning': errorMessage?.length }
     ]"
   >
+    <div class="errorMessage">{{ errorMessage }}</div>
     <input
       v-model="value"
       :placeholder="placeholder"
       type="number"
       class="inputNumber__input"
+      :class="{ 'inputNumber__input-warning': errorMessage?.length }"
       autocomplete="on"
       :maxlength="maxLength"
       @input="onInput"
@@ -82,16 +84,11 @@ function onInput() {
   margin-top: 12px;
   &-wrapper {
     width: 100%;
-    overflow: hidden;
-    border-radius: 8px;
     position: relative;
     input[type='number']::-webkit-outer-spin-button,
     input[type='number']::-webkit-inner-spin-button {
       -webkit-appearance: none;
       margin: 0;
-    }
-    &-warning {
-      border: 1px solid #ff0000;
     }
   }
   &__input {
@@ -104,6 +101,17 @@ function onInput() {
     padding: 16px;
     border: none;
     outline: none;
+    border-radius: 8px;
+    &-warning {
+      border: 1px solid #ff0000;
+    }
   }
+}
+.errorMessage {
+  position: absolute;
+  bottom: calc(100% + 1px);
+  max-width: 100%;
+  color: #ff0000;
+  font-weight: 500;
 }
 </style>

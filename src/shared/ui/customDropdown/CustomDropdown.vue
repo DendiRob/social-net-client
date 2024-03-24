@@ -16,10 +16,14 @@
       class="item__list"
       :style="{ maxHeight: maxHeight + 'px' }"
     >
-      <div @click="updateValue('asdadsasd')" class="item">asdasdas</div>
-      <div @click="updateValue('asdadsasd')" class="item">asdasdas</div>
-      <div @click="updateValue('asdadsasd')" class="item">asdasdas</div>
-      <div @click="updateValue('asdadsasd')" class="item">asdasdas</div>
+      <div
+        v-for="(option, index) in options"
+        @click="updateValue(option as string | number)"
+        :key="index"
+        class="item"
+      >
+        {{ option }}
+      </div>
     </div>
   </div>
 </template>
@@ -29,7 +33,7 @@ import { onBeforeUnmount, onMounted, ref } from 'vue';
 const emit = defineEmits(['update:modelValue']);
 const props = defineProps({
   modelValue: {
-    type: String,
+    type: String || Number,
     default: () => ''
   },
   placeholder: {
@@ -42,6 +46,10 @@ const props = defineProps({
   disabled: {
     type: Boolean,
     default: false
+  },
+  options: {
+    type: Array,
+    default: () => []
   }
 });
 
@@ -55,7 +63,7 @@ const switcher = () => {
   isActive.value = !isActive.value;
 };
 
-const updateValue = (value: string) => {
+const updateValue = (value: string | number) => {
   closeList();
   emit('update:modelValue', value);
 };
