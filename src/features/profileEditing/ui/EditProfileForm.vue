@@ -43,13 +43,13 @@
         class="days"
         v-bind="inputsForm.fileds.days"
         v-model="inputsForm.fileds.days.value"
-        :disabled="inputsForm.fileds.month.value === '' || isYearFilled"
+        :disabled="inputsForm.fileds.month.value === '' || !isYearFilled"
       />
       <CustomDropdown
         class="months"
         v-bind="inputsForm.fileds.month"
         v-model="inputsForm.fileds.month.value"
-        :disabled="isYearFilled"
+        :disabled="!isYearFilled"
       />
       <InputNumber
         class="years"
@@ -128,12 +128,11 @@ const inputsForm = ref({
 });
 
 const isYearFilled = computed(() => {
-  // console.log(inputsForm.value.fileds.years.value);
-  return (
+  const isFilled =
     inputsForm.value.fileds.years.value === undefined ||
     String(inputsForm.value.fileds.years.value).length <
-      inputsForm.value.fileds.years.maxLength
-  );
+      inputsForm.value.fileds.years.maxLength;
+  return !isFilled;
 });
 </script>
 <style scoped lang="scss">

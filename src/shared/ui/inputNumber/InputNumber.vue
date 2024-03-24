@@ -44,6 +44,10 @@ const props = defineProps({
   maxLength: {
     type: Number,
     default: null
+  },
+  onlyInt: {
+    type: Boolean,
+    default: false
   }
 });
 const { value, errorMessage, validate } = useField(props.name, props.rules, {
@@ -54,8 +58,14 @@ const emits = defineEmits(['input', 'update:modelValue']);
 defineExpose({ validate });
 
 watch(value, () => {
-  if (String(value.value).length > props.maxLength) {
-    value.value = +String(value.value).slice(0, -1);
+  const stringVal = String(value.value);
+  if (stringVal.includes('.')) {
+    const stringInd = stringVal.indexOf('.');
+    value.value = +stringVal.slice(0, stringInd);
+  }
+
+  if (stringVal.length > props.maxLength) {
+    value.value = +stringVal.slice(0, -1);
   }
 });
 
