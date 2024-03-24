@@ -41,23 +41,23 @@
     <div class="profile__birthday">
       <CustomDropdown
         class="days"
-        v-bind="inputsForm.fileds.days"
-        v-model="inputsForm.fileds.days.value"
+        v-bind="inputsForm.fileds.day"
+        v-model="inputsForm.fileds.day.value"
         :options="daysByMonth"
-        :disabled="inputsForm.fileds.months.value === '' || !isYearFilled"
+        :disabled="inputsForm.fileds.month.value === '' || !isYearFilled"
       />
       <CustomDropdown
         class="months"
-        v-bind="inputsForm.fileds.months"
-        v-model="inputsForm.fileds.months.value"
+        v-bind="inputsForm.fileds.month"
+        v-model="inputsForm.fileds.month.value"
         :options="monthsOfYear"
         :disabled="!isYearFilled"
       />
       <InputNumber
         class="years"
         @keydown.space.prevent
-        v-bind="inputsForm.fileds.years"
-        v-model="inputsForm.fileds.years.value"
+        v-bind="inputsForm.fileds.year"
+        v-model="inputsForm.fileds.year.value"
       />
     </div>
     <CustomBtn type="submit" size="large">Сохранить изменения</CustomBtn>
@@ -72,6 +72,9 @@ import CustomDropdown from 'shared/ui/customDropdown';
 
 import { validateEditProfileForm } from '../model/profileEditing.schemas';
 import { monthsOfYear } from '../model/consts';
+import useToastr from 'shared/lib/useToastr';
+
+const toastr = useToastr();
 
 const inputsForm = ref({
   fileds: {
@@ -100,7 +103,7 @@ const inputsForm = ref({
       placeholder: 'Введите имя пользователя ',
       maxLength: 30
     },
-    years: {
+    year: {
       value: undefined,
       name: 'years',
       placeholder: 'Год',
@@ -111,12 +114,12 @@ const inputsForm = ref({
       placeholder: 'Обо мне',
       maxLength: 430
     },
-    days: {
+    day: {
       value: '',
       placeholder: 'День',
       maxHeight: 200
     },
-    months: {
+    month: {
       value: '',
       placeholder: 'Месяц',
       maxHeight: 200
@@ -131,10 +134,10 @@ function getDaysInMonth(year: number, month: number) {
 
 const daysByMonth = computed(() => {
   const month = monthsOfYear.findIndex(
-    (month) => month === inputsForm.value.fileds.months.value
+    (month) => month === inputsForm.value.fileds.month.value
   );
-  if (inputsForm.value.fileds.years.value === undefined) return [];
-  const years = +inputsForm.value.fileds.years.value;
+  if (inputsForm.value.fileds.year.value === undefined) return [];
+  const years = +inputsForm.value.fileds.year.value;
 
   const finishDay = getDaysInMonth(years, month);
 
@@ -143,16 +146,33 @@ const daysByMonth = computed(() => {
 });
 
 async function onSubmit(value: Record<string, any>) {
-  // TODO: запрос на изменение данных
+  const years = value.years;
+  const month = inputsForm.value.fileds.month.value;
+  const days = inputsForm.value.fileds.day.value;
 
-  console.log(value);
+  if (years && (month === '' || days === '')) {
+    toastr.error({
+      text: 'Заполните дату рождения полностью!'
+    });
+    return;
+  }
+
+  const data = value;
+  if (years) {
+    const monthByIndex = monthsOfYear.findIndex((i) => i === month);
+    const transformDate = new Date(years, monthByIndex, +days);
+    data.birthday = transformDate.toISOString();
+    delete value.years;
+  }
+
+  console.log(data);
 }
 
 const isYearFilled = computed(() => {
   const isFilled =
-    inputsForm.value.fileds.years.value === undefined ||
-    String(inputsForm.value.fileds.years.value).length <
-      inputsForm.value.fileds.years.maxLength;
+    inputsForm.value.fileds.year.value === undefined ||
+    String(inputsForm.value.fileds.year.value).length <
+      inputsForm.value.fileds.year.maxLength;
   return !isFilled;
 });
 </script>

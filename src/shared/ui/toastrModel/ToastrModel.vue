@@ -39,6 +39,7 @@ const toastrStore = useToastr();
   left: 50%;
   transform: translateX(-50%);
   bottom: 0;
+  z-index: 1000;
   &__box {
     display: flex;
     flex-direction: column;

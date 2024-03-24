@@ -32,5 +32,4 @@ export const validateEditProfileForm = yup.object({
     .min(1900, 'Год рождения должен быть в диапазоне от 1900 до 2006')
     .max(2006, 'Год рождения должен быть в диапазоне от 1900 до 2006')
     .notRequired()
-    .nullable()
 });

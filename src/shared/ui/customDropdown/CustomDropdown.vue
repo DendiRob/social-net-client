@@ -33,7 +33,7 @@ import { onBeforeUnmount, onMounted, ref } from 'vue';
 const emit = defineEmits(['update:modelValue']);
 const props = defineProps({
   modelValue: {
-    type: String || Number,
+    type: [String, Number],
     default: () => ''
   },
   placeholder: {
