@@ -15,7 +15,6 @@
 </template>
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { isAxiosError } from 'axios';
 import { useRouter } from 'vue-router';
 
 import ProfileSidePanel from 'entities/profile/ui/ProfileSidePanel';
@@ -28,12 +27,11 @@ import {
 import ConfirmModal from 'shared/ui/confirmModal';
 import SidebarNavItem from 'shared/ui/sidebarNavItem';
 import SidebarNav from 'shared/ui/sidebarNav';
-import useToastr from 'shared/lib/useToastr';
+import { isAxiosError } from 'shared/utils';
 
 const router = useRouter();
 const viewerStore = useSessionStore();
 const profileStore = profileModel.useProfileStore();
-const toastr = useToastr();
 
 const isLoading = ref(false);
 const profileSidePanelProps = ref<IUserProfile>();
@@ -46,11 +44,7 @@ async function logout() {
 
     router.push({ name: 'login' });
   } catch (error) {
-    if (isAxiosError(error)) {
-      const apiErrors = error.response?.data;
-      const errorText = apiErrors?.payload[0] ?? 'Что-то пошло не так!';
-      return toastr.error({ text: errorText });
-    }
+    isAxiosError(error);
   } finally {
     isLoading.value = false;
   }
