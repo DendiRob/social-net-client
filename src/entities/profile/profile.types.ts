@@ -1,12 +1,3 @@
-export interface IUserProfile {
-  id: number | undefined;
-  image: string;
-  name: string | undefined;
-  about: string;
-  birthDate: string;
-  email: string | undefined;
-}
-
 export const sidebar_profile_types = {
   editProfile: {
     icon: 'editProfile',
@@ -24,3 +15,9 @@ export const sidebar_profile_types = {
     routeName: 'profile-invite-friends'
   }
 };
+
+export interface IUserProfile {
+  email: string;
+  nickname: string;
+  avatarId: number | null;
+}

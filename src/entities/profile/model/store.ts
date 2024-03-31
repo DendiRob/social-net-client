@@ -1,28 +1,55 @@
 import { defineStore } from 'pinia';
-import { reactive } from 'vue';
+import { ref } from 'vue';
 
-import { getUserProfileByUuid } from '../api';
-import type { IUserProfile } from '../profile.types';
+import { isAxiosError } from 'shared/utils';
+import * as service from '../api';
 
 const namespaced = 'profileStore';
 
 export const useProfileStore = defineStore(namespaced, () => {
-  let profile = reactive<IUserProfile>({
-    id: undefined,
-    image: '',
-    birthDate: '',
-    name: undefined,
-    about: '',
-    email: undefined
-  });
+  const profileId = ref(null);
+  const userId = ref(null);
+  const firstName = ref('');
+  const secondName = ref('');
+  const thirdName = ref('');
+  const aboutMe = ref('');
+  const birthday = ref('');
+  const avatarId = ref<number | null>(null);
+  const email = ref('');
+  const nickname = ref('');
 
-  async function getUserProfile(uuid: string) {
-    const res = await getUserProfileByUuid(uuid); // TODO: доделать
-    profile = res.data;
+  async function getUserProfile() {
+    try {
+      const res = await service.getUserProfile(); // TODO: доделать
+      const data = res.data;
+
+      profileId.value = data.id;
+      nickname.value = data.nickname;
+      userId.value = data.userId;
+      firstName.value = data.firstName;
+      secondName.value = data.secondName;
+      thirdName.value = data.thirdName;
+      aboutMe.value = data.aboutMe;
+      birthday.value = data.birthday;
+      avatarId.value = data.userProfileFiles[0]?.id ?? '';
+      email.value = data.user.email ?? '';
+    } catch (error) {
+      isAxiosError(error);
+    }
   }
 
   return {
-    profile,
+    profileId,
+    userId,
+    firstName,
+    secondName,
+    thirdName,
+    aboutMe,
+    birthday,
+    avatarId,
+    email,
+    nickname,
+
     getUserProfile
   };
 });

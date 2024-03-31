@@ -1,7 +1,7 @@
 <template>
   <div class="settings">
     <SidebarTitle>Настройки</SidebarTitle>
-    <ProfileSidePanel :user="profileStore.profile" />
+    <ProfileSidePanel :user="profileSidePanelProps" />
     <SidebarNav :menuItems="sidebar_profile_types" />
     <ConfirmModal
       title="Вы дейтсвительно хотите выйти?"
@@ -21,7 +21,10 @@ import { useRouter } from 'vue-router';
 import ProfileSidePanel from 'entities/profile/ui/ProfileSidePanel';
 import { useSessionStore } from 'entities/session/model';
 import { profileModel } from 'entities/profile';
-import { sidebar_profile_types } from 'entities/profile/profile.types';
+import {
+  type IUserProfile,
+  sidebar_profile_types
+} from 'entities/profile/profile.types';
 import ConfirmModal from 'shared/ui/confirmModal';
 import SidebarNavItem from 'shared/ui/sidebarNavItem';
 import SidebarNav from 'shared/ui/sidebarNav';
@@ -33,6 +36,7 @@ const profileStore = profileModel.useProfileStore();
 const toastr = useToastr();
 
 const isLoading = ref(false);
+const profileSidePanelProps = ref<IUserProfile>();
 
 async function logout() {
   try {
@@ -53,8 +57,13 @@ async function logout() {
 }
 
 onMounted(async () => {
-  //TODO: сделать запрос
-  await profileStore.getUserProfile(viewerStore.viewerUuid);
+  await profileStore.getUserProfile();
+
+  profileSidePanelProps.value = {
+    nickname: profileStore.nickname,
+    email: profileStore.email,
+    avatarId: profileStore.avatarId
+  };
 });
 </script>
 <style scoped lang="scss">
