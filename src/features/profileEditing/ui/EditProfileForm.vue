@@ -145,7 +145,7 @@ const introductionInputs = ref({
     maxLength: 430
   }
 });
-
+// TODO: сделать дропдауны полями vee-validate
 const birthdayInputs = ref<IBirthdayInputs>({
   year: {
     value: undefined,
