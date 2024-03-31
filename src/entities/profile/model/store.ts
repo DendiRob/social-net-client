@@ -17,6 +17,8 @@ export const useProfileStore = defineStore(namespaced, () => {
   const avatarId = ref<number | null>(null);
   const email = ref('');
   const nickname = ref('');
+  const userStatus = ref('');
+  const userLocation = ref('');
 
   async function getUserProfile() {
     try {
@@ -33,6 +35,8 @@ export const useProfileStore = defineStore(namespaced, () => {
       birthday.value = data.birthday;
       avatarId.value = data.userProfileFiles[0]?.id ?? '';
       email.value = data.user.email ?? '';
+      userLocation.value = data.userLocation ?? '';
+      userStatus.value = data.userStatus ?? '';
     } catch (error) {
       isAxiosError(error);
     }
@@ -49,6 +53,8 @@ export const useProfileStore = defineStore(namespaced, () => {
     avatarId,
     email,
     nickname,
+    userStatus,
+    userLocation,
 
     getUserProfile
   };

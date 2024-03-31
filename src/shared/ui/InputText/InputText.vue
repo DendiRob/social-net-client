@@ -19,7 +19,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { toRaw } from 'vue';
+import { toRaw, watch } from 'vue';
 import { useField } from 'vee-validate';
 
 const emit = defineEmits(['update:modelValue', 'input']);
@@ -54,6 +54,7 @@ const props = defineProps({
   }
 });
 const { value, errorMessage, validate } = useField(props.name, props.rules, {
+  syncVModel: true,
   initialValue: toRaw(props.modelValue),
   ...props.options
 });
@@ -62,6 +63,7 @@ defineExpose({ validate });
 
 const updateValue = () => {
   const val = toRaw(value);
+
   emit('input', val);
   emit('update:modelValue', val);
 };

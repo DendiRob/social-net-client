@@ -53,6 +53,7 @@ const props = defineProps({
   }
 });
 const { value, errorMessage, validate } = useField(props.name, props.rules, {
+  syncVModel: true,
   initialValue: toRaw(props.modelValue),
   ...props.options
 });

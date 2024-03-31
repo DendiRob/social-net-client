@@ -9,7 +9,10 @@
 </template>
 <script setup lang="ts">
 defineProps({
-  modelValue: String,
+  modelValue: {
+    type: String,
+    default: ''
+  },
   placeholder: { type: String, default: '' },
   maxLength: { type: Number, default: null }
 });
