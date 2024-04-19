@@ -13,3 +13,14 @@ export interface IBirthdayInputs {
   day: Field;
   month: Field;
 }
+
+export interface IUserProfileUpdate {
+  birthday: Date | null;
+  firstName: string | null;
+  nickname: string | null;
+  aboutMe: string | null;
+  secondName: string | null;
+  thirdName: string | null;
+  userLocation: string | null;
+  userStatus: string | null;
+}

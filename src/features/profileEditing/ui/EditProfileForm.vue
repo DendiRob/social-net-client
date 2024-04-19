@@ -81,12 +81,13 @@ import { computed, ref, watch } from 'vue';
 import CustomTextarea from 'shared/ui/customTextarea';
 import CustomDropdown from 'shared/ui/customDropdown';
 
+import type { IBirthdayInputs, IUserProfileUpdate } from '../model/types';
+import { updateUserProfile } from 'entities/profile/api';
 import { validateEditProfileForm } from '../model/profileEditing.schemas';
 import { monthsOfYear } from '../model/consts';
 import useToastr from 'shared/lib/useToastr';
 import { profileModel } from 'entities/profile';
 import { storeToRefs } from 'pinia';
-import type { IBirthdayInputs } from '../model/types';
 
 const toastr = useToastr();
 const profileStore = profileModel.useProfileStore();
@@ -141,11 +142,12 @@ const introductionInputs = ref({
   },
   aboutMe: {
     value: aboutMe,
+    name: 'aboutMe',
     placeholder: 'Обо мне',
     maxLength: 430
   }
 });
-// TODO: сделать дропдауны полями vee-validate
+
 const birthdayInputs = ref<IBirthdayInputs>({
   year: {
     value: undefined,
@@ -166,26 +168,34 @@ const birthdayInputs = ref<IBirthdayInputs>({
 });
 
 async function onSubmit(value: Record<string, any>) {
-  const years = value.year;
-  const month = birthdayInputs.value.month.value;
-  const day = birthdayInputs.value.day.value ?? '';
+  try {
+    const years = value.year;
+    const month = birthdayInputs.value.month.value;
+    const day = birthdayInputs.value.day.value ?? '';
 
-  if (years && (month === '' || day === '')) {
-    toastr.error({
-      text: 'Заполните дату рождения полностью!'
-    });
-    return;
-  }
+    if (years && (month === '' || day === '')) {
+      toastr.error({
+        text: 'Заполните дату рождения полностью!'
+      });
+      return;
+    }
 
-  const data = value;
-  if (years) {
-    const monthByIndex = monthsOfYear.findIndex((i) => i === month);
-    const transformDate = new Date(years, monthByIndex, +day);
-    data.birthday = transformDate.toISOString();
+    const data = value;
+    if (years) {
+      const monthByIndex = monthsOfYear.findIndex((i) => i === month);
+      const transformDate = new Date(years, monthByIndex, +day);
+      data.birthday = transformDate.toISOString();
+    }
     delete value.year;
-  }
 
-  console.log(data);
+    await updateUserProfile(data as IUserProfileUpdate);
+
+    toastr.success({ text: 'Изменения прошли успешно' });
+  } catch (error) {
+    toastr.error({
+      text: 'Что-то пошло не так!'
+    });
+  }
 }
 
 function getDaysInMonth(year: number, month: number) {

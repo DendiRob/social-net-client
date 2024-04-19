@@ -7,7 +7,6 @@
   >
     <div class="errorMessage">{{ errorMessage }}</div>
     <input
-      @input="updateValue"
       v-model="value"
       :placeholder="placeholder"
       :type="inputType"
@@ -19,10 +18,9 @@
   </div>
 </template>
 <script setup lang="ts">
-import { toRaw, watch } from 'vue';
+import { toRaw } from 'vue';
 import { useField } from 'vee-validate';
 
-const emit = defineEmits(['update:modelValue', 'input']);
 const props = defineProps({
   modelValue: {
     type: String,
@@ -60,13 +58,6 @@ const { value, errorMessage, validate } = useField(props.name, props.rules, {
 });
 
 defineExpose({ validate });
-
-const updateValue = () => {
-  const val = toRaw(value);
-
-  emit('input', val);
-  emit('update:modelValue', val);
-};
 </script>
 <style scoped lang="scss">
 .inputText {

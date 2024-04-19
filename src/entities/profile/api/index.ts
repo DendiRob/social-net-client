@@ -1,3 +1,4 @@
+import type { IUserProfileUpdate } from 'features/profileEditing/model/types';
 import { api_service } from 'shared/api/server';
 
 export async function getUserProfile() {
@@ -9,3 +10,7 @@ export async function getUserAvatar(avatarId: number) {
     responseType: 'blob'
   });
 }
+
+export const updateUserProfile = async (data: IUserProfileUpdate) => {
+  return await api_service.post('userProfiles/update-user-profile', data);
+};

@@ -1,14 +1,28 @@
 <template>
   <textarea
-    :value="modelValue"
-    @input="updateValue"
+    v-model="value"
     class="customTextarea"
     :placeholder="placeholder"
     :maxlength="maxLength"
   ></textarea>
 </template>
 <script setup lang="ts">
-defineProps({
+import { useField } from 'vee-validate';
+import { toRaw } from 'vue';
+
+const props = defineProps({
+  rules: {
+    type: Object,
+    default: () => ({})
+  },
+  name: {
+    type: String,
+    default: () => ' '
+  },
+  options: {
+    type: Object,
+    default: () => ({})
+  },
   modelValue: {
     type: String,
     default: ''
@@ -17,11 +31,13 @@ defineProps({
   maxLength: { type: Number, default: null }
 });
 
-const emits = defineEmits(['update:modelValue']);
+const { value, validate } = useField(props.name, props.rules, {
+  syncVModel: true,
+  initialValue: toRaw(props.modelValue),
+  ...props.options
+});
 
-const updateValue = (e: Event) => {
-  emits('update:modelValue', (e.target as HTMLInputElement).value);
-};
+defineExpose({ validate });
 </script>
 <style scoped lang="scss">
 .customTextarea {
