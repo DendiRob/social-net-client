@@ -50,6 +50,10 @@ const props = defineProps({
   onlyInt: {
     type: Boolean,
     default: false
+  },
+  zeroable: {
+    type: Boolean,
+    default: false
   }
 });
 const { value, errorMessage, validate, handleChange } = useField(
@@ -61,11 +65,14 @@ const { value, errorMessage, validate, handleChange } = useField(
     ...props.options
   }
 );
-const emits = defineEmits(['input', 'update:modelValue']);
 defineExpose({ validate });
 
 function onInput() {
   const { value: rawValue } = toRaw(value);
+
+  if (!props.zeroable && rawValue === 0) {
+    return handleChange(null);
+  }
 
   const stringVal = String(rawValue);
 
