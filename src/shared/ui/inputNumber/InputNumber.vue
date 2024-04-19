@@ -19,12 +19,12 @@
   </div>
 </template>
 <script setup lang="ts">
-import { toRaw, watch } from 'vue';
+import { toRaw } from 'vue';
 import { useField } from 'vee-validate';
 
 const props = defineProps({
   modelValue: {
-    type: Number,
+    type: [Number, String],
     default: () => null
   },
   placeholder: {
@@ -37,7 +37,7 @@ const props = defineProps({
   },
   name: {
     type: String,
-    default: () => ' '
+    default: () => ''
   },
   options: {
     type: Object,
@@ -52,31 +52,33 @@ const props = defineProps({
     default: false
   }
 });
-const { value, errorMessage, validate } = useField(props.name, props.rules, {
-  syncVModel: true,
-  initialValue: toRaw(props.modelValue),
-  ...props.options
-});
+const { value, errorMessage, validate, handleChange } = useField(
+  props.name,
+  props.rules,
+  {
+    syncVModel: true,
+    initialValue: toRaw(props.modelValue),
+    ...props.options
+  }
+);
 const emits = defineEmits(['input', 'update:modelValue']);
 defineExpose({ validate });
-
-watch(value, () => {
-  const stringVal = String(value.value);
-  if (stringVal.includes('.')) {
-    const stringInd = stringVal.indexOf('.');
-    value.value = +stringVal.slice(0, stringInd);
-  }
-
-  if (stringVal.length > props.maxLength) {
-    value.value = +stringVal.slice(0, -1);
-  }
-});
 
 function onInput() {
   const { value: rawValue } = toRaw(value);
 
-  emits('input', +rawValue);
-  emits('update:modelValue', +rawValue);
+  const stringVal = String(rawValue);
+
+  if (stringVal.includes('.')) {
+    const stringInd = stringVal.indexOf('.');
+    const formatedVal = +stringVal.slice(0, stringInd);
+    return handleChange(formatedVal);
+  }
+
+  if (stringVal.length > props.maxLength) {
+    const cuttedValue = +stringVal.slice(0, -1);
+    return handleChange(cuttedValue);
+  }
 }
 </script>
 <style scoped lang="scss">

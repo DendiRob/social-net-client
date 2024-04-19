@@ -165,24 +165,6 @@ const birthdayInputs = ref<IBirthdayInputs>({
   }
 });
 
-function getDaysInMonth(year: number, month: number) {
-  const lastDayOfMonth = new Date(year, month + 1, 0);
-  return lastDayOfMonth.getDate();
-}
-
-const daysByMonth = computed(() => {
-  const month = monthsOfYear.findIndex(
-    (month) => month === birthdayInputs.value.month.value
-  );
-  if (birthdayInputs.value.year.value === undefined) return [];
-  const years = +birthdayInputs.value.year.value;
-
-  const finishDay = getDaysInMonth(years, month);
-
-  const days = Array.from({ length: finishDay }, (_, index) => index + 1);
-  return days;
-});
-
 async function onSubmit(value: Record<string, any>) {
   const years = value.year;
   const month = birthdayInputs.value.month.value;
@@ -205,6 +187,24 @@ async function onSubmit(value: Record<string, any>) {
 
   console.log(data);
 }
+
+function getDaysInMonth(year: number, month: number) {
+  const lastDayOfMonth = new Date(year, month + 1, 0);
+  return lastDayOfMonth.getDate();
+}
+
+const daysByMonth = computed(() => {
+  const month = monthsOfYear.findIndex(
+    (month) => month === birthdayInputs.value.month.value
+  );
+  if (birthdayInputs.value.year.value === undefined) return [];
+  const years = +birthdayInputs.value.year.value;
+
+  const finishDay = getDaysInMonth(years, month);
+
+  const days = Array.from({ length: finishDay }, (_, index) => index + 1);
+  return days;
+});
 
 const isYearFilled = computed(() => {
   if (birthdayInputs.value.year.maxLength === undefined) return;

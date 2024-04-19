@@ -33,7 +33,7 @@ export const useProfileStore = defineStore(namespaced, () => {
       thirdName.value = data.thirdName;
       aboutMe.value = data.aboutMe;
       birthday.value = data.birthday;
-      avatarId.value = data.userProfileFiles[0]?.id ?? '';
+      avatarId.value = data.userProfileFiles[0]?.id ?? null;
       email.value = data.user.email ?? '';
       userLocation.value = data.userLocation ?? '';
       userStatus.value = data.userStatus ?? '';

@@ -38,8 +38,10 @@ export const validateEditProfileForm = yup.object({
     .nullable()
     .transform((value) => (value ? value : null)),
   year: yup
-    .date()
+    .number()
     .notRequired()
+    .min(1900, 'Год рождения должен быть больше, чем 1899')
+    .max(2005, 'Год рождения должен быть меньше, чем 2006')
     .nullable()
     .transform((value) => (value ? value : null))
 });
