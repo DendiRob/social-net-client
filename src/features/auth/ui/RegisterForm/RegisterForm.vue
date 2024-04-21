@@ -109,6 +109,7 @@ const comparePassSchema = yup.object({
   name: yup.string().required('Укажите ваш ник!')
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const inputsForm = ref({
   fileds: {
     email: {

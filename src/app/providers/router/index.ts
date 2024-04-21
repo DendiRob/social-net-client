@@ -18,8 +18,9 @@ router.beforeEach(async (to) => {
   if (to.name === 'reg' && !sessionStore.isAuth) return;
 
   await sessionStore.getViewer();
-
-  if (to.name === 'profile-editing') await profileStore.getUserProfile();
+  // TODO: изменить отрисовку инфы тут, не нужно запрашивать весь профиль при переходе в настроики
+  if (to.name === 'profile-editing' || to.name === 'settings-main')
+    await profileStore.getUserProfile();
 
   userStore.userUrlHistory = to.fullPath;
 
