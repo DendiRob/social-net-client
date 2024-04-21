@@ -7,8 +7,6 @@
 </template>
 <script setup lang="ts">
 import { SetAvatar, EditProfileForm } from 'features/profileEditing';
-
-// TODO: запрос делаем на сервер за фоткой
 </script>
 <style scoped lang="scss">
 .profile {

@@ -1,10 +1,9 @@
 import axios from 'axios';
 import useToastr from 'shared/lib/useToastr';
 
-const toastr = useToastr();
-
 export default function isAxiosError(error: unknown) {
   if (axios.isAxiosError(error)) {
+    const toastr = useToastr();
     const apiErrors = error.response?.data;
     const payload = Array.isArray(apiErrors?.payload)
       ? apiErrors.payload[0]

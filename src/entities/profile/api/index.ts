@@ -14,3 +14,7 @@ export async function getUserAvatar(avatarId: number) {
 export const updateUserProfile = async (data: IUserProfileUpdate) => {
   return await api_service.post('userProfiles/update-user-profile', data);
 };
+
+export const deleteProfileAvatar = async (fileId: number) => {
+  return await api_service.post(`userProfiles/delete-profile-avatar/${fileId}`);
+};

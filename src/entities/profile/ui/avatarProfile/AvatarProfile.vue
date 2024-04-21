@@ -26,6 +26,8 @@ watch(
       if (props?.avatarId !== undefined && props?.avatarId !== null) {
         const res = await getUserAvatar(props.avatarId);
         userIcon.value = URL.createObjectURL(res.data);
+      } else {
+        userIcon.value = undefined;
       }
     } catch (error) {
       isAxiosError(error);

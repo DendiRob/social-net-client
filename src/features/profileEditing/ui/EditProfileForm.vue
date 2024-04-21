@@ -180,13 +180,23 @@ async function onSubmit(value: Record<string, any>) {
       return;
     }
 
-    const data = value;
+    const data: Record<string, any> = {
+      aboutMe: value.aboutMe,
+      birthday: null,
+      firstName: value.firstName,
+      nickname: value.nickname,
+      secondName: value.secondName,
+      thirdName: value.thirdName,
+      userLocation: value.userLocation,
+      userStatus: value.userStatus
+    };
+
     if (years) {
       const monthByIndex = monthsOfYear.findIndex((i) => i === month);
-      const transformDate = new Date(years, monthByIndex, +day);
+      const transformDate = new Date(Date.UTC(years, monthByIndex, +day));
+      console.log(transformDate, years, monthByIndex, +day);
       data.birthday = transformDate.toISOString();
     }
-    delete value.year;
 
     await updateUserProfile(data as IUserProfileUpdate);
 

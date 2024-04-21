@@ -14,7 +14,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import ProfileSidePanel from 'entities/profile/ui/ProfileSidePanel';
@@ -34,7 +34,13 @@ const viewerStore = useSessionStore();
 const profileStore = profileModel.useProfileStore();
 
 const isLoading = ref(false);
-const profileSidePanelProps = ref<IUserProfile>();
+const profileSidePanelProps = computed<IUserProfile>(() => {
+  return {
+    nickname: profileStore.nickname,
+    email: profileStore.email,
+    avatarId: profileStore.avatarId
+  };
+});
 
 async function logout() {
   try {
@@ -49,16 +55,6 @@ async function logout() {
     isLoading.value = false;
   }
 }
-
-onMounted(async () => {
-  await profileStore.getUserProfile();
-
-  profileSidePanelProps.value = {
-    nickname: profileStore.nickname,
-    email: profileStore.email,
-    avatarId: profileStore.avatarId
-  };
-});
 </script>
 <style scoped lang="scss">
 .settings {
