@@ -1,11 +1,19 @@
 <template>
   <div class="avatar-wrapper">
-    <AvatarInput v-model="image" @delete="deleteAvatar" />
+    <AvatarInput
+      v-model="image"
+      @delete="deleteAvatar"
+      @setAvatar="setAvatar"
+    />
   </div>
 </template>
 <script setup lang="ts">
 import { AvatarInput, profileModel } from 'entities/profile';
-import { deleteProfileAvatar, getUserAvatar } from 'entities/profile/api';
+import {
+  deleteProfileAvatar,
+  getUserAvatar,
+  setProfileAvatar
+} from 'entities/profile/api';
 import { isAxiosError } from 'shared/utils';
 import { onMounted, ref } from 'vue';
 
@@ -19,6 +27,20 @@ onMounted(async () => {
     image.value = res.data;
   }
 });
+
+async function setAvatar(avatar: File) {
+  try {
+    let formData = new FormData();
+    formData.append('avatar', avatar);
+    if (profileStore.profileId !== null) {
+      formData.append('profileId', profileStore.profileId);
+    }
+    const res = await setProfileAvatar(formData);
+    profileStore.avatarId = res.data.avatarId;
+  } catch (error) {
+    isAxiosError(error);
+  }
+}
 
 async function deleteAvatar() {
   try {

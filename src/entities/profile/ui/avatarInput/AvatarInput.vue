@@ -26,7 +26,7 @@ import { computed, ref } from 'vue';
 
 import addPhoto from 'shared/ui/assets/add-photo.svg';
 
-const emits = defineEmits(['update:modelValue', 'delete']);
+const emits = defineEmits(['update:modelValue', 'delete', 'setAvatar']);
 const props = defineProps({
   modelValue: {
     default: null
@@ -37,9 +37,10 @@ const imageInput = ref<any>();
 
 function setAvatar(e: Event) {
   const inputTarget = e.target as HTMLInputElement;
-  if (inputTarget?.files === null) return;
-
-  emits('update:modelValue', inputTarget.files[0]);
+  if (inputTarget?.files !== null) {
+    emits('setAvatar', inputTarget.files[0]);
+    emits('update:modelValue', inputTarget.files[0]);
+  }
 }
 
 const avatarUrl = computed(() => {
